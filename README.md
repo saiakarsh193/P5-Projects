@@ -10,5 +10,6 @@ This library is simple to use and can change your perspective towards simulation
 I hope you find these projects helpful in some way.
 ---
 **Perk**
+
 *The best part of using js libraries is you dont need to install anything. Downloaded project files are runnable right out the bat. I would recommend using VSCode live server for hosting.*
 ---
