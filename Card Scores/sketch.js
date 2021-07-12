@@ -3,35 +3,33 @@ let sx;
 let sy;
 let bheight;
 let bwidth;
-let yMax;
-let yDiv;
-
-let data = [];
+let raw;
 
 function setup()
 {
   createCanvas(1200, 680);
-
   cx = width / 2;
   cy = height / 2;
   bheight = 400;
   bwidth = 800;
-  yMax = 150;
-  yDiv = 10;
   sx = -(bwidth / 2);
   sy = -(bheight / 2);
   fetch("gamedata.json")
-    .then(response => {
-      return response.json();
-    })
-    .then(djson => data = djson);
+    .then(response => 
+      {
+        return response.json();
+      })
+    .then(djson => raw = djson);
 }
 
 function draw()
 {
-  if(!data)
+  if(!raw)
     return;
 
+  let data = raw["data"];
+  let yMax = raw["limit"];
+  let yDiv = raw["divisions"];
   let len = data[0]["score"].length;
   
   background(255);
