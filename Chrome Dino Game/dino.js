@@ -49,4 +49,29 @@ class Dino
             this.y = this.height;
         }
     }
+
+    getCollide(objects)
+    {
+        let isCollide = false;
+        objects.forEach((obj) =>
+        {
+            if(!(this.x >= obj[0] + obj[2] || this.x + this.width <= obj[0] || this.y <= obj[1] - obj[3] || this.y - this.height >= obj[1]))
+                isCollide = true;
+        });
+        return isCollide;
+    }
+
+    autoJump(objects)
+    {
+        let leastDistance = -1;
+        objects.forEach((obj) =>
+        {
+            if(obj[0] > this.x && (leastDistance == -1 || obj[0] - this.x < leastDistance))
+                leastDistance = obj[0] - this.x;
+        });
+        if(leastDistance > 0 && leastDistance < 15)
+        {
+            this.jump();
+        }
+    }
 }
