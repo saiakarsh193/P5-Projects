@@ -21,15 +21,17 @@ function draw()
   {
     background(255);
     translate(cx, cy);
-    drawGround();
+    drawGround();    
+    
+    obs.update();
     player.crouch(keyIsDown(40) || keyIsDown(83));
     player.jump(keyIsDown(38) || keyIsDown(87));
-    player.autoJump(obs.getTranscript());
-    player.update();
-    player.draw();
-    obs.update();
-    obs.draw();
+    player.autoInput(obs.getTranscript());
     stopGame = player.getCollide(obs.getTranscript());
+    player.update();
+
+    obs.draw();
+    player.draw();
   }
 }
 

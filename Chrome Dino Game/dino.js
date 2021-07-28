@@ -3,7 +3,7 @@ class Dino
     constructor(scaler = 10)
     {
         this.sheight = 10;
-        this.cheight = 3;
+        this.cheight = 5;
         this.height = this.sheight;
         this.width = 5;
         this.x = 0;
@@ -31,7 +31,7 @@ class Dino
         }
     }
 
-    jump(key = true, impulse = 15)
+    jump(key = true, impulse = 16)
     {
         if(this.y - this.height == 0 && key)
         {
@@ -52,26 +52,49 @@ class Dino
 
     getCollide(objects)
     {
-        let isCollide = false;
-        objects.forEach((obj) =>
+        for(var i = 0;i < objects.length;i ++)
         {
-            if(!(this.x >= obj[0] + obj[2] || this.x + this.width <= obj[0] || this.y <= obj[1] - obj[3] || this.y - this.height >= obj[1]))
-                isCollide = true;
-        });
-        return isCollide;
+            if(!(this.x >= objects[i][0] + objects[i][2] || this.x + this.width <= objects[i][0] || this.y <= objects[i][1] - objects[i][3] || this.y - this.height >= objects[i][1]))
+                return true;
+        }
+        return false;
     }
 
-    autoJump(objects)
+    autoInput(objects)
     {
-        let leastDistance = -1;
-        objects.forEach((obj) =>
+        let ind = -1;
+        for(var i = 0;i < objects.length;i ++)
         {
-            if(obj[0] > this.x && (leastDistance == -1 || obj[0] - this.x < leastDistance))
-                leastDistance = obj[0] - this.x;
-        });
-        if(leastDistance > 0 && leastDistance < 15)
+            if((objects[i][0] <= this.x && this.x <= objects[i][0] + objects[i][2]) || objects[i][0] > this.x)
+            {
+                ind = i;
+                break;
+            }
+        }
+        if(ind >= 0)
         {
-            this.jump();
+            fill(255, 0, 0);
+            strokeWeight(0);
+            circle(objects[ind][0] * this.scaler, -objects[ind][1] * this.scaler, 25);
+            let leastDistance = objects[ind][0] - this.x;
+            let width = objects[ind][2];
+            let type = objects[ind][4];
+            if(type == 0 && leastDistance < 15)
+            {
+                this.jump(true);
+            }
+            else if(type == 1 && leastDistance < 15)
+            {
+                this.jump(true);
+            }
+            else if(type == 2 && leastDistance + width < 15)
+            {
+                this.crouch(true);
+            }
+            else if(type == 3 && leastDistance < 10)
+            {
+                this.jump(true);
+            }
         }
     }
 }
