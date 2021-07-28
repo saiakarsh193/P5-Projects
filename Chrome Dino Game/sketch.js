@@ -24,14 +24,12 @@ function draw()
     drawGround();    
     
     obs.update();
-    player.crouch(keyIsDown(40) || keyIsDown(83));
-    player.jump(keyIsDown(38) || keyIsDown(87));
-    player.autoInput(obs.getTranscript());
+    player.setInput(keyIsDown(38) || keyIsDown(87), keyIsDown(40) || keyIsDown(83));
+    // player.autoInput(obs.getTranscript());
     stopGame = player.getCollide(obs.getTranscript());
     player.update();
-
-    obs.draw();
     player.draw();
+    obs.draw();
   }
 }
 

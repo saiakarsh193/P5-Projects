@@ -11,6 +11,8 @@ class Dino
         this.vy = 0;
         this.gravity = -10;
         this.scaler = scaler;
+        this.isJump = false;
+        this.isCrouch = false;
     }
 
     draw()
@@ -22,6 +24,7 @@ class Dino
 
     update(dT = 0.1)
     {
+        this.applyInput();
         this.vy += this.gravity * dT;
         this.y += this.vy * dT;
         if(this.y - this.height < 0)
@@ -31,23 +34,17 @@ class Dino
         }
     }
 
-    jump(key = true, impulse = 16)
+    jump(impulse = 16)
     {
-        if(this.y - this.height == 0 && key)
-        {
-            this.vy = impulse;
-            this.height = this.sheight;
-            this.y = this.height;
-        }
+        this.vy = impulse;
+        this.height = this.sheight;
+        this.y = this.height;
     }
 
-    crouch(key = false)
+    crouch()
     {
-        if(this.y - this.height == 0)
-        {
-            this.height = key ? this.cheight : this.sheight;
-            this.y = this.height;
-        }
+        this.height = this.cheight;
+        this.y = this.height;
     }
 
     getCollide(objects)
@@ -60,40 +57,46 @@ class Dino
         return false;
     }
 
+    setInput(jump, crouch)
+    {
+        this.isJump = jump;
+        this.isCrouch = crouch;
+    }
+
+    applyInput()
+    {
+        if(this.y - this.height == 0)
+        {
+            this.height = this.sheight;
+            if(this.isJump)
+                this.jump();
+            else if(this.isCrouch)
+                this.crouch();
+        }
+    }
+
     autoInput(objects)
     {
-        let ind = -1;
+        this.setInput(false, false);
         for(var i = 0;i < objects.length;i ++)
         {
             if((objects[i][0] <= this.x && this.x <= objects[i][0] + objects[i][2]) || objects[i][0] > this.x)
             {
-                ind = i;
+                fill(255, 0, 0);
+                strokeWeight(0);
+                circle(objects[i][0] * this.scaler, -objects[i][1] * this.scaler, 25);
+                let leastDistance = objects[i][0] - this.x;
+                let width = objects[i][2];
+                let type = objects[i][4];
+                if(type == 0 && leastDistance < 15)
+                    this.setInput(true, false);
+                else if(type == 1 && leastDistance < 15)
+                    this.setInput(true, false);
+                else if(type == 2 && leastDistance + width < 15)
+                    this.setInput(false, true);
+                else if(type == 3 && leastDistance < 10)
+                    this.setInput(true, false);
                 break;
-            }
-        }
-        if(ind >= 0)
-        {
-            fill(255, 0, 0);
-            strokeWeight(0);
-            circle(objects[ind][0] * this.scaler, -objects[ind][1] * this.scaler, 25);
-            let leastDistance = objects[ind][0] - this.x;
-            let width = objects[ind][2];
-            let type = objects[ind][4];
-            if(type == 0 && leastDistance < 15)
-            {
-                this.jump(true);
-            }
-            else if(type == 1 && leastDistance < 15)
-            {
-                this.jump(true);
-            }
-            else if(type == 2 && leastDistance + width < 15)
-            {
-                this.crouch(true);
-            }
-            else if(type == 3 && leastDistance < 10)
-            {
-                this.jump(true);
             }
         }
     }
