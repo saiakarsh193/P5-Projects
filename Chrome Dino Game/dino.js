@@ -5,7 +5,9 @@ class Dino
         this.sheight = 10;
         this.cheight = 5;
         this.height = this.sheight;
-        this.width = 5;
+        this.swidth = 5;
+        this.cwidth = 10;
+        this.width = this.swidth;
         this.x = 0;
         this.y = this.height;
         this.vy = 0;
@@ -38,20 +40,22 @@ class Dino
     {
         this.vy = impulse;
         this.height = this.sheight;
+        this.width = this.swidth;
         this.y = this.height;
     }
 
     crouch()
     {
         this.height = this.cheight;
+        this.width = this.cwidth;
         this.y = this.height;
     }
 
-    getCollide(objects)
+    getCollide(objects, tolerance = -0.2)
     {
         for(var i = 0;i < objects.length;i ++)
         {
-            if(!(this.x >= objects[i][0] + objects[i][2] || this.x + this.width <= objects[i][0] || this.y <= objects[i][1] - objects[i][3] || this.y - this.height >= objects[i][1]))
+            if(Math.max(this.x - (objects[i][0] + objects[i][2]), objects[i][0] - (this.x + this.width), (objects[i][1] - objects[i][3]) - this.y, (this.y - this.height) - objects[i][1]) < tolerance)
                 return true;
         }
         return false;
@@ -68,6 +72,7 @@ class Dino
         if(this.y - this.height == 0)
         {
             this.height = this.sheight;
+            this.width = this.swidth;
             if(this.isJump)
                 this.jump();
             else if(this.isCrouch)

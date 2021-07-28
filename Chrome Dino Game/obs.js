@@ -6,8 +6,9 @@ class Obstacle
         this.lx = -this.rx;
         this.scaler = scaler;
         this.speed = -0.8;
-        this.acceleration = 0;
+        // this.acceleration = 0;
         // this.acceleration = -0.002;
+        this.acceleration = -0.006;
         this.objects = [];
     }
     

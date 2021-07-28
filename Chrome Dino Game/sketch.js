@@ -24,9 +24,9 @@ function draw()
     drawGround();    
     
     obs.update();
-    player.setInput(keyIsDown(38) || keyIsDown(87), keyIsDown(40) || keyIsDown(83));
-    // player.autoInput(obs.getTranscript());
-    stopGame = player.getCollide(obs.getTranscript());
+    // player.setInput(keyIsDown(38) || keyIsDown(87), keyIsDown(40) || keyIsDown(83));
+    player.autoInput(obs.getTranscript());
+    stopGame = player.getCollide(obs.getTranscript(), -0.8);
     player.update();
     player.draw();
     obs.draw();
