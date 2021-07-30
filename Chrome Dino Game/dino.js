@@ -90,9 +90,19 @@ class Dino
         {
             if((objects[i][0] <= this.x && this.x <= objects[i][0] + objects[i][2]) || objects[i][0] > this.x)
             {
-                fill(255, 0, 0);
-                strokeWeight(0);
-                circle(objects[i][0] * this.scaler, -objects[i][1] * this.scaler, 25);
+                let dis = objects[i][0] - (this.x + this.width);
+                if(0 <= dis && dis <= 40)
+                {
+                    let col = (dis > 10) ? color(0, 255, 0) : color(255, 0, 0);
+                    fill(col);
+                    stroke(col);
+                    strokeWeight(0);
+                    circle(objects[i][0] * this.scaler, -objects[i][1] * this.scaler, 15);
+                    circle((this.x + this.width) * this.scaler, -this.y * this.scaler, 15);
+                    noFill(0);
+                    strokeWeight(3);
+                    line((this.x + this.width) * this.scaler, -this.y * this.scaler, objects[i][0] * this.scaler, -objects[i][1] * this.scaler);
+                }
                 let leastDistance = objects[i][0] - this.x;
                 let width = objects[i][2];
                 let type = objects[i][4];
