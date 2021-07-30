@@ -13,6 +13,7 @@ let sTime;
 let lookTime;
 let startLevel;
 let currentLevel;
+let gameEnd;
 
 function setup()
 {
@@ -20,6 +21,7 @@ function setup()
   cx = width / 2;
   cy = height / 2;
   startLevel = 4;
+  gameEnd = false;
   setGrid(10);
   newGame();
 }
@@ -29,6 +31,8 @@ function draw()
   background(200);
   translate(cx, cy);
   drawSupport();
+  if(gameEnd)
+    return
   drawTiles();
   if(set[set.length - 1][1] == 1)
     gotoLevel(++ currentLevel);
@@ -82,9 +86,18 @@ function drawSupport()
   strokeWeight(0);
   fill(0);
   textSize(30);
+  if(gameEnd)
+  {
+    textAlign(CENTER, CENTER);
+    text("Memory Game by Sai Akarsh", 0, -50);
+    text("Your Score: " + (currentLevel - startLevel), 0, 30);
+    return;
+  }
   textAlign(LEFT, TOP);
   text("Time: " + round(cTime, 1), -cx, -cy);
-  text("Level: " + (currentLevel - startLevel + 1), -cx, -cy + 30)
+  text("Level: " + (currentLevel - startLevel + 1), -cx, -cy + 30);
+  textAlign(RIGHT, TOP);
+  text("Memory Game", cx, -cy);
 
   stroke(0);
   strokeWeight(5);
@@ -154,7 +167,7 @@ function toIndex(row, col)
 
 function mousePressed()
 {
-  if(cTime - sTime < lookTime)
+  if(cTime - sTime < lookTime || gameEnd)
     return;
   mouseX -= cx;
   mouseY -= cy;
@@ -168,7 +181,7 @@ function mousePressed()
       if(i == 0 || (i > 0 && set[i - 1][1] == 1))
         set[i][1] = 1;
       else
-        newGame();
+        gameEnd = true;
     }
   }
 }
