@@ -5,10 +5,9 @@ let sw;
 let sh;
 let dx;
 let dy;
+let dpath;
 let grid;
 let n;
-
-let dpath;
 
 function setup()
 {
@@ -16,9 +15,14 @@ function setup()
 
   cx = width / 2;
   cy = height / 2;
+  sx = -250;
+  sy = -275;
+  dx = 5;
+  dy = 5;
   n = 10;
+  grid = new Array(n).fill(0).map(() => new Array(n).fill(0));
   dpath = false;
-  setGrid(n);
+  setDimensions(n);
 }
 
 function draw()
@@ -28,19 +32,14 @@ function draw()
   drawGrid();
 }
 
-function setGrid(val)
+function setDimensions(val)
 {
-  sx = -250;
-  sy = -275;
-  dx = 5;
-  dy = 5;
   let tw = -2 * sx;
   let th = -2 * sy;
   tw -= (val - 1) * dx;
   th -= (val - 1) * dy;
   sw = tw / val;
   sh = th / val;
-  grid = new Array(val).fill(0).map(() => new Array(val).fill(0));
 }
 
 function drawGrid()
