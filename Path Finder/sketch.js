@@ -78,7 +78,7 @@ function findPath()
   let found = false;
   while(stk.length > 0)
   {
-    let cur = stk.pop();
+    let cur = stk.splice(0, 1)[0];
     let row = cur[0];
     let col = cur[1];
     if(row == n - 1 && col == n - 1)
@@ -86,25 +86,25 @@ function findPath()
       found = true;
       break;
     }
-    if(row > 0 && visit[row - 1][col] == 0)
+    if(row < n - 1 && visit[row + 1][col] == 0)
     {
-      stk.push([row - 1, col]);
-      visit[row - 1][col] = cur;
-    }
-    if(col > 0 && visit[row][col - 1] == 0)
-    {
-      stk.push([row, col - 1]);
-      visit[row][col - 1] = cur;
+      stk.push([row + 1, col]);
+      visit[row + 1][col] = cur;
     }
     if(col < n - 1 && visit[row][col + 1] == 0)
     {
       stk.push([row, col + 1]);
       visit[row][col + 1] = cur;
     }
-    if(row < n - 1 && visit[row + 1][col] == 0)
+    if(col > 0 && visit[row][col - 1] == 0)
     {
-      stk.push([row + 1, col]);
-      visit[row + 1][col] = cur;
+      stk.push([row, col - 1]);
+      visit[row][col - 1] = cur;
+    }
+    if(row > 0 && visit[row - 1][col] == 0)
+    {
+      stk.push([row - 1, col]);
+      visit[row - 1][col] = cur;
     }
   }
   if(found)
