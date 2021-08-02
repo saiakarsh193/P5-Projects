@@ -16,13 +16,9 @@ function setup()
 
   cx = width / 2;
   cy = height / 2;
-  n = 6;
+  n = 10;
   dpath = false;
   setGrid(n);
-  for(let col = 0;col < n - 1;col ++)
-    grid[1][col] = 2;
-  for(let col = 1;col < n;col ++)
-    grid[n - 2][col] = 2;
 }
 
 function draw()
@@ -90,15 +86,15 @@ function findPath()
       found = true;
       break;
     }
-    if(col > 0 && visit[row][col - 1] == 0)
-    {
-      stk.push([row, col - 1]);
-      visit[row][col - 1] = cur;
-    }
     if(row > 0 && visit[row - 1][col] == 0)
     {
       stk.push([row - 1, col]);
       visit[row - 1][col] = cur;
+    }
+    if(col > 0 && visit[row][col - 1] == 0)
+    {
+      stk.push([row, col - 1]);
+      visit[row][col - 1] = cur;
     }
     if(col < n - 1 && visit[row][col + 1] == 0)
     {
