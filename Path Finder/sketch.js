@@ -5,6 +5,12 @@ let sw;
 let sh;
 let dx;
 let dy;
+
+let sbx;
+let sby;
+let sbw;
+let sbh;
+
 let dpath;
 let grid;
 let n;
@@ -19,6 +25,10 @@ function setup()
   sy = -275;
   dx = 5;
   dy = 5;
+  sbx = 400;
+  sby = -25;
+  sbw = 50;
+  sbh = 50;
   n = 10;
   grid = new Array(n).fill(0).map(() => new Array(n).fill(0));
   dpath = false;
@@ -30,6 +40,7 @@ function draw()
   background(200);
   translate(cx, cy);
   drawGrid();
+  drawButton();
 }
 
 function setDimensions(val)
@@ -58,6 +69,29 @@ function drawGrid()
         fill(255, 0, 0);
       rect(sx + col * (sw + dx), sy + row * (sh + dy), sw, sh);
     }
+  }
+}
+
+function drawButton()
+{
+  stroke(0);
+  strokeWeight(0);
+  textAlign(LEFT, TOP);
+  textSize(14);
+  textFont('Georgia');
+  if(!dpath)
+  {
+    fill(34, 186, 0);
+    rect(sbx, sby, sbw, sbh, 15);
+    fill(255);
+    text("Draw\nPath", sbx + 8, sby + 10);
+  }
+  else
+  {
+    fill(255);
+    rect(sbx, sby, sbw, sbh, 15);
+    fill(255, 0, 0);
+    text("Clear\nPath", sbx + 8, sby + 10);
   }
 }
 
@@ -123,16 +157,19 @@ function mousePressed()
 {
   mouseX -= cx;
   mouseY -= cy;
-  let col = int((mouseX - sx) / (sw + dx));
-  let row = int((mouseY - sy) / (sh + dy));
-  if(!dpath && mouseX > sx && mouseY > sy && row < n && col < n)
+  if(mouseX > sx && mouseY > sy && mouseX < -sx && mouseY < -sy)
   {
-    if(grid[row][col] == 2)
-      grid[row][col] = 0;
-    else
-      grid[row][col] = 2;
+    if(!dpath)
+    {
+      let col = int((mouseX - sx) / (sw + dx));
+      let row = int((mouseY - sy) / (sh + dy));
+      if(mouseButton == RIGHT)
+        grid[row][col] = 0;
+      else if(mouseButton == LEFT)
+        grid[row][col] = 2;
+    }
   }
-  else
+  if(mouseX > sbx && mouseY > sby && mouseX < sbx + sbw && mouseY < sby + sbh)
   {
     if(dpath == false)
     {
@@ -150,6 +187,24 @@ function mousePressed()
             grid[row][col] = 0;
         }
       }
+    }
+  }
+}
+
+function mouseDragged()
+{
+  mouseX -= cx;
+  mouseY -= cy;
+  if(mouseX > sx && mouseY > sy && mouseX < -sx && mouseY < -sy)
+  {
+    if(!dpath)
+    {
+      let col = int((mouseX - sx) / (sw + dx));
+      let row = int((mouseY - sy) / (sh + dy));
+      if(mouseButton == RIGHT)
+        grid[row][col] = 0;
+      else if(mouseButton == LEFT)
+        grid[row][col] = 2;
     }
   }
 }
