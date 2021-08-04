@@ -11,7 +11,6 @@ let sby;
 let sbw;
 let sbh;
 
-let dpath;
 let grid;
 let n;
 
@@ -23,16 +22,17 @@ function setup()
   cy = height / 2;
   sx = -250;
   sy = -275;
-  dx = 5;
-  dy = 5;
+  dx = 2;
+  dy = 2;
   sbx = 400;
   sby = -25;
   sbw = 50;
   sbh = 50;
-  n = 10;
+  n = 40;
   grid = new Array(n).fill(0).map(() => new Array(n).fill(0));
   dpath = false;
   setDimensions(n);
+  findPath();
 }
 
 function draw()
@@ -40,7 +40,6 @@ function draw()
   background(200);
   translate(cx, cy);
   drawGrid();
-  drawButton();
 }
 
 function setDimensions(val)
@@ -69,29 +68,6 @@ function drawGrid()
         fill(255, 0, 0);
       rect(sx + col * (sw + dx), sy + row * (sh + dy), sw, sh);
     }
-  }
-}
-
-function drawButton()
-{
-  stroke(0);
-  strokeWeight(0);
-  textAlign(LEFT, TOP);
-  textSize(14);
-  textFont('Georgia');
-  if(!dpath)
-  {
-    fill(34, 186, 0);
-    rect(sbx, sby, sbw, sbh, 15);
-    fill(255);
-    text("Draw\nPath", sbx + 8, sby + 10);
-  }
-  else
-  {
-    fill(255);
-    rect(sbx, sby, sbw, sbh, 15);
-    fill(255, 0, 0);
-    text("Clear\nPath", sbx + 8, sby + 10);
   }
 }
 
@@ -155,56 +131,34 @@ function findPath()
 
 function mousePressed()
 {
-  mouseX -= cx;
-  mouseY -= cy;
-  if(mouseX > sx && mouseY > sy && mouseX < -sx && mouseY < -sy)
-  {
-    if(!dpath)
-    {
-      let col = int((mouseX - sx) / (sw + dx));
-      let row = int((mouseY - sy) / (sh + dy));
-      if(mouseButton == RIGHT)
-        grid[row][col] = 0;
-      else if(mouseButton == LEFT)
-        grid[row][col] = 2;
-    }
-  }
-  if(mouseX > sbx && mouseY > sby && mouseX < sbx + sbw && mouseY < sby + sbh)
-  {
-    if(dpath == false)
-    {
-      dpath = true;
-      findPath();
-    }
-    else
-    {
-      dpath = false;
-      for(let row = 0;row < n;row ++)
-      {
-        for(let col = 0;col < n;col ++)
-        {
-          if(grid[row][col] == 1)
-            grid[row][col] = 0;
-        }
-      }
-    }
-  }
+  mouseOn();
 }
 
 function mouseDragged()
+{
+  mouseOn();
+}
+
+function mouseOn()
 {
   mouseX -= cx;
   mouseY -= cy;
   if(mouseX > sx && mouseY > sy && mouseX < -sx && mouseY < -sy)
   {
-    if(!dpath)
+    let col = int((mouseX - sx) / (sw + dx));
+    let row = int((mouseY - sy) / (sh + dy));
+    if(mouseButton == RIGHT)
+      grid[row][col] = 0;
+    else if(mouseButton == LEFT)
+      grid[row][col] = 2;
+    for(let row = 0;row < n;row ++)
     {
-      let col = int((mouseX - sx) / (sw + dx));
-      let row = int((mouseY - sy) / (sh + dy));
-      if(mouseButton == RIGHT)
-        grid[row][col] = 0;
-      else if(mouseButton == LEFT)
-        grid[row][col] = 2;
+      for(let col = 0;col < n;col ++)
+      {
+        if(grid[row][col] == 1)
+          grid[row][col] = 0;
+      }
     }
+    findPath();
   }
 }
