@@ -6,11 +6,6 @@ let sh;
 let dx;
 let dy;
 
-let sbx;
-let sby;
-let sbw;
-let sbh;
-
 let grid;
 let n;
 
@@ -24,13 +19,8 @@ function setup()
   sy = -275;
   dx = 2;
   dy = 2;
-  sbx = 400;
-  sby = -25;
-  sbw = 50;
-  sbh = 50;
   n = 40;
   grid = new Array(n).fill(0).map(() => new Array(n).fill(0));
-  dpath = false;
   setDimensions(n);
   findPath();
 }
