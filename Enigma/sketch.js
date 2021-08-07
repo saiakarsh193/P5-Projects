@@ -69,7 +69,7 @@ class Engima
 
   draw()
   {
-    let sx = 410;
+    let sx = 210;
     let sy = 100;
     let dx = 100;
 
@@ -87,7 +87,7 @@ class Engima
       this.drawNum(this.A[i][1], sx + i * dx, sy + 50);
     }
 
-    // this.drawConnections();
+    this.drawConnections();
   }
 
   drawNum(val, x, y)
@@ -110,8 +110,8 @@ class Engima
     let sh = 150;
     let bxl = sx + 10;
     let bxr = sx + sw - 10;
-    let byl = sy + 35;
-    let byr = sy + sh - 30;
+    let byl = sy + 10;
+    let byr = sy + sh - 10;
     stroke(0);
     strokeWeight(2);
     noFill();
@@ -127,7 +127,7 @@ class Engima
     for(let i = 0;i < 26;i ++)
     {
       let ax = map(i, 0, 25, bxl, bxr);
-      let ay =  map(-1, 0, this.A.length - 1, byl, byr);
+      let ay =  map(-1, -1, this.A.length, byl, byr);
       fill(255);
       circle(ax, ay, 13);
       fill(0);
@@ -138,9 +138,9 @@ class Engima
       for(let j = 0;j < 26;j ++)
       {
         let ax = map(j, 0, 25, bxl, bxr);
-        let ay = map((i - 1), 0, this.A.length - 1, byl, byr);
+        let ay = map((i - 1), -1, this.A.length, byl, byr);
         let bx = map(this.A[i][j], 0, 25, bxl, bxr);
-        let by = map(i, 0, this.A.length - 1, byl, byr);
+        let by = map(i, -1, this.A.length, byl, byr);
         line(ax, ay, bx, by);
         circle(bx, by, 5);
       }
@@ -148,15 +148,15 @@ class Engima
     for(let i = 0;i < 26;i ++)
     {
       let ax = map(i, 0, 25, bxl, bxr);
-      let ay =  map(this.A.length, 0, this.A.length - 1, byl, byr);
+      let ay =  map(this.A.length, -1, this.A.length, byl, byr);
       fill(255);
       circle(ax, ay, 13);
       fill(0);
       text(this.C[i], ax, ay);
       let bx = map(this.C[i], 0, 25, bxl, bxr);
-      let by = map(this.A.length - 1, 0, this.A.length - 1, byl, byr);
+      let by = map(this.A.length - 1, -1, this.A.length, byl, byr);
       let cx = map(i, 0, 25, bxl, bxr);
-      let cy = map(this.A.length - 1, 0, this.A.length - 1, byl, byr);
+      let cy = map(this.A.length - 1, -1, this.A.length, byl, byr);
       line(ax, ay, bx, by);
       line(ax, ay, cx, cy);
     }
