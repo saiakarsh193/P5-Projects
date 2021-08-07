@@ -114,25 +114,11 @@ class Engima
     let byr = sy + sh - 10;
     stroke(0);
     strokeWeight(2);
-    noFill();
-    rect(sx, sy, sw, sh);
     fill(255);
     rect(sx, sy, sw, sh);
 
-    stroke(0);
     strokeWeight(1);
     fill(0);
-    textSize(10);
-    textAlign(CENTER, CENTER);
-    for(let i = 0;i < 26;i ++)
-    {
-      let ax = map(i, 0, 25, bxl, bxr);
-      let ay =  map(-1, -1, this.A.length, byl, byr);
-      fill(255);
-      circle(ax, ay, 13);
-      fill(0);
-      text(i, ax, ay);
-    }
     for(let i = 0;i < this.A.length;i ++)
     {
       for(let j = 0;j < 26;j ++)
@@ -145,20 +131,25 @@ class Engima
         circle(bx, by, 5);
       }
     }
+    fill(0);
     for(let i = 0;i < 26;i ++)
     {
       let ax = map(i, 0, 25, bxl, bxr);
-      let ay =  map(this.A.length, -1, this.A.length, byl, byr);
+      let ay = map(this.A.length - 1, -1, this.A.length, byl, byr);
+      let bx = map((this.C[i] + i) / 2, 0, 25, bxl, bxr);
+      let by = map(this.A.length, -1, this.A.length, byl, byr);
+      line(ax, ay, bx, by);
+    }
+    textSize(10);
+    textAlign(CENTER, CENTER);
+    for(let i = 0;i < 26;i ++)
+    {
+      let ax = map(i, 0, 25, bxl, bxr);
+      let ay =  map(-1, -1, this.A.length, byl, byr);
       fill(255);
       circle(ax, ay, 13);
       fill(0);
-      text(this.C[i], ax, ay);
-      let bx = map(this.C[i], 0, 25, bxl, bxr);
-      let by = map(this.A.length - 1, -1, this.A.length, byl, byr);
-      let cx = map(i, 0, 25, bxl, bxr);
-      let cy = map(this.A.length - 1, -1, this.A.length, byl, byr);
-      line(ax, ay, bx, by);
-      line(ax, ay, cx, cy);
+      text(this.rule[i], ax, ay);
     }
   }
 }
