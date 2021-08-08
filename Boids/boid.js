@@ -13,20 +13,30 @@ class Boid
     calculateHeading(bdata)
     {
         let count = 0;
-        let avg_ang = 0;
+        let avg_sep = 0;
+        let avg_align = 0;
+        let avg_coh = createVector(0, 0);
         for(let i = 0;i < bdata.length;i ++)
         {
-            let dis = Math.sqrt(Math.pow(bdata[i][0] - this.pos.x, 2) + Math.pow(bdata[i][1] - this.pos.y, 2));
+            let dis = this.pos.dist(bdata[i][0]);
             if(dis > 0 && dis < this.ndis)
             {
-                avg_ang += bdata[i][2];
+                avg_sep += 0.05 * ((this.ndis - dis) / this.ndis) * p5.Vector.sub(this.pos, bdata[i][0]).normalize().heading();
+                avg_align += bdata[i][1];
+                avg_coh.add(p5.Vector.sub(bdata[i][0], this.pos));
                 count ++;
             }
         }
         if(count > 0)
         {
-            avg_ang /= count;
-            this.angle = (19 * this.angle + avg_ang) / 20;
+            avg_sep /= count;
+            avg_align /= count;
+            avg_coh.x /= count;
+            avg_coh.y /= count;
+            // fill(0);
+            // circle(this.pos.x + avg_coh.x, -(this.pos.y + avg_coh.y), 10);
+            avg_coh = avg_coh.heading();
+            this.angle = (19 * this.angle + avg_align) / 20;
         }
     }
 

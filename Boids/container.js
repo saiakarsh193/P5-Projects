@@ -13,7 +13,7 @@ class Container
     {
         let bdata = [];
         for(let i = 0;i < this.count;i ++)
-            bdata.push([this.boids[i].pos.x, this.boids[i].pos.y, this.boids[i].angle]);
+            bdata.push([this.boids[i].pos, this.boids[i].angle]);
         for(let i = 0;i < this.count;i ++)
         {
             this.boids[i].calculateHeading(bdata);
