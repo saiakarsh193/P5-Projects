@@ -44,11 +44,13 @@ class Car
 
     draw()
     {
-        let data = [[this.x - 10, this.y + 20], [this.x + 10, this.y + 20], [this.x + 10, this.y - 20], [this.x - 10, this.y - 20],
-                    [this.x - 8, this.y + 10], [this.x + 8, this.y + 10], [this.x + 8, this.y + 5], [this.x - 8, this.y + 5],
-                    [this.x - 7, this.y + 19], [this.x - 3, this.y + 19], [this.x - 3, this.y + 17], [this.x - 7, this.y + 17],
-                    [this.x + 7, this.y + 19], [this.x + 3, this.y + 19], [this.x + 3, this.y + 17], [this.x + 7, this.y + 17]];
-        let temp = this.rotateArray(data);
+        this.drawBody();
+        this.drawRays();
+    }
+
+    drawBody()
+    {
+        let temp = this.getShapes();
         stroke(0);
         strokeWeight(0);
         fill(255, 0, 0);
@@ -57,6 +59,47 @@ class Car
         quad(temp[4][0], -temp[4][1], temp[5][0], -temp[5][1], temp[6][0], -temp[6][1], temp[7][0], -temp[7][1]);
         quad(temp[8][0], -temp[8][1], temp[9][0], -temp[9][1], temp[10][0], -temp[10][1], temp[11][0], -temp[11][1]);
         quad(temp[12][0], -temp[12][1], temp[13][0], -temp[13][1], temp[14][0], -temp[14][1], temp[15][0], -temp[15][1]);
+    }
+
+    drawRays()
+    {
+        let temp = this.getRays();
+        strokeWeight(2);
+        noFill();
+        for(let i = 0;i < temp.length;i ++)
+            line(temp[i][0], -temp[i][1], temp[i][2], -temp[i][3]);
+    }
+
+    getShapes()
+    {
+        return this.rotateArray([
+            [this.x - 10, this.y + 20], [this.x + 10, this.y + 20], [this.x + 10, this.y - 20], [this.x - 10, this.y - 20],
+            [this.x - 8, this.y + 10], [this.x + 8, this.y + 10], [this.x + 8, this.y + 5], [this.x - 8, this.y + 5],
+            [this.x - 7, this.y + 19], [this.x - 3, this.y + 19], [this.x - 3, this.y + 17], [this.x - 7, this.y + 17],
+            [this.x + 7, this.y + 19], [this.x + 3, this.y + 19], [this.x + 3, this.y + 17], [this.x + 7, this.y + 17]
+        ]);
+    }
+
+    getRays()
+    {
+        let raylen = 100;
+        let rayclen = 70;
+        let dx = 15;
+        let dy = 25;
+        let temp = this.rotateArray([
+            [this.x, this.y + dy], [this.x, this.y + dy + raylen], // N
+            [this.x, this.y - dy], [this.x, this.y - dy - raylen], // S
+            [this.x - dx, this.y], [this.x - dx - raylen, this.y], // W
+            [this.x + dx, this.y], [this.x + dx + raylen, this.y], // E
+            [this.x + dx, this.y + dy], [this.x + dx + rayclen, this.y + dy + rayclen], // NE
+            [this.x + dx, this.y - dy], [this.x + dx + rayclen, this.y - dy - rayclen], // SE
+            [this.x - dx, this.y + dy], [this.x - dx - rayclen, this.y + dy + rayclen], // NW
+            [this.x - dx, this.y - dy], [this.x - dx - rayclen, this.y - dy - rayclen] // SW
+        ]);
+        let rays = [];
+        for(let i = 0;i < temp.length;i += 2)
+            rays.push([temp[i][0], temp[i][1], temp[i + 1][0], temp[i + 1][1]]);
+        return rays;
     }
 
     rotateArray(array)
@@ -79,51 +122,49 @@ class Car
         return [nx, ny];
     }
 
-    checkBounds()
+    checkCollisions(walls, bounds=true)
     {
-        let walls = [
-            [-cx, cy, cx, cy],
-            [cx + 1, cy + 1, cx, -cy],
-            [cx, -cy, -cx, -cy],
-            [-cx - 1, -cy - 1, -cx, cy]];
-        return this.checkCollisions(walls);
-    }
-
-    checkCollisions(walls)
-    {
-        let data = [
-            [this.x - 10, this.y + 20, this.x + 10, this.y + 20], 
-            [this.x + 10, this.y + 20, this.x + 10, this.y - 20],
-            [this.x + 10, this.y - 20, this.x - 10, this.y - 20],
-            [this.x - 10, this.y - 20, this.x - 10, this.y + 20]];
-        for(let i = 0;i < walls.length;i ++)
+        let crash_distance = 3;
+        walls = [...walls]; // duplicate the array
+        let rays = this.getRays();
+        if(bounds)
+            walls.push([-cx, cy, cx, cy], [cx + 1, cy + 1, cx, -cy], [cx, -cy, -cx, -cy], [-cx - 1, -cy - 1, -cx, cy]);
+        for(let i = 0;i < rays.length;i ++)
         {
-            for(let j = 0;j < 4;j ++)
+            let mins = 1;
+            let a = [rays[i][0], rays[i][1]];
+            let b = [rays[i][2] - rays[i][0], rays[i][3] - rays[i][1]];
+            for(let j = 0;j < walls.length;j ++)
             {
-                if(this.intersect(walls[i], data[j]))
+                let s = this.intersect(a, b, [walls[j][0], walls[j][1]], [walls[j][2] - walls[j][0], walls[j][3] - walls[j][1]]);
+                if(s != -1 && s < mins)
+                    mins = s;
+            }
+            if(0 < mins && mins < 1)
+            {
+                let w = [a[0] + mins * b[0], (a[1] + mins * b[1])];
+                circle(w[0], -w[1], 10);
+                let dis = Math.sqrt(Math.pow(w[0] - a[0], 2) + Math.pow(w[1] - a[1], 2));
+                if(dis < crash_distance)
                     return true;
             }
         }
         return false;
     }
 
-    intersect(line1, line2)
+    intersect(a, b, c, d)
     {
-        let a1 = line1[0];
-        let a2 = line1[1];
-        let b1 = line1[2];
-        let b2 = line1[3];
-        let c1 = line2[0];
-        let c2 = line2[1];
-        let d1 = line2[2];
-        let d2 = line2[3];
-        if((b1 - a1) == (d1 - c1) && (b2 - a2) == (d2 - c2))
+        if(b[0] == d[0] && b[1] == d[1])
             return false;
-        let t = ((c1 - a1) * (b2 - a2) - (c2 - a2) * (b1 - a1)) / ((d2 - c2) * (b1 - a1) - (d1 - c1) * (b2 - a2));
-        let s = ((c1 - a1) + t * (d1 - c1)) / (b1 - a1);
+        if(b[0] == 0) b[0] = 0.01;
+        if(b[1] == 0) b[1] = 0.01;
+        if(d[0] == 0) d[0] = 0.01;
+        if(d[1] == 0) d[1] = 0.01;
+        let t = ((c[0] - a[0]) * b[1] - (c[1] - a[1]) * b[0]) / (d[1] * b[0] - d[0] * b[1]);
+        let s = ((c[0] - a[0]) + t * d[0]) / b[0];
         if(0 <= s && s <= 1 && 0 <= t && t <= 1)
-            return true;
+            return s;
         else
-            return false;
+            return -1;
     }
 }
