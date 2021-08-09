@@ -6,11 +6,12 @@ class Container
         this.count = count;
         this.bound = bound;
         this.speed = 5;
+        this.size = 12;
         this.ndis = 50;
         this.spread = (2 * PI / 3);
         this.coeff = [46, 2, 1, 1, 50];
         for(let i = 0;i < this.count;i ++)
-            this.boids.push(new Boid(this.bound, this.speed, this.ndis, this.spread, this.coeff));
+            this.boids.push(new Boid(this.speed, this.size, this.ndis, this.spread, this.coeff, this.bound));
     }
 
     update()

@@ -1,14 +1,15 @@
 class Boid
 {
-    constructor(bound, speed, ndis, spread, coeff)
+    constructor(speed, size, ndis, spread, coeff, bound)
     {
-        this.pos = createVector(Math.random() * (bound[1] - bound[0]) + bound[0], Math.random() * (bound[3] - bound[2]) + bound[2]);
-        this.angle = Math.random() * 2 * PI;
-        this.gcolor = int(Math.random() * 115) + 140;
         this.speed = speed;
+        this.size = size;
         this.ndis = ndis;
         this.spread = spread;
         this.coeff = coeff;
+        this.pos = createVector(Math.random() * (bound[1] - bound[0]) + bound[0], Math.random() * (bound[3] - bound[2]) + bound[2]);
+        this.angle = Math.random() * 2 * PI;
+        this.gcolor = int(Math.random() * 115) + 140;
     }
 
     calculateHeading(bdata)
@@ -64,9 +65,9 @@ class Boid
     draw()
     {
         let data = [
-            createVector(7, 0).setHeading(this.angle + ((13 * PI) / 18)),
-            createVector(12, 0).setHeading(this.angle),
-            createVector(7, 0).setHeading(this.angle - ((13 * PI) / 18))
+            createVector(this.size - 5, 0).setHeading(this.angle + ((13 * PI) / 18)),
+            createVector(this.size, 0).setHeading(this.angle),
+            createVector(this.size - 5, 0).setHeading(this.angle - ((13 * PI) / 18))
         ];
         stroke(0);
         strokeWeight(0);
