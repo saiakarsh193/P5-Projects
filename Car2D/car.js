@@ -15,7 +15,7 @@ class Car
         this.ang = 0;
         this.speed = 0;
         this.ang_speed = 0;
-        this.sensordata = [];
+        this.sensordata = [-1, -1, -1, -1, -1, -1, -1, -1];
     }
 
     input(forward, backward, left, right)
@@ -158,16 +158,16 @@ class Car
         let doReset = false;
         for(let i = 0;i < rays.length;i ++)
         {
-            let mins = 1;
+            let mins = -1;
             let a = [rays[i][0], rays[i][1]];
             let b = [rays[i][2] - rays[i][0], rays[i][3] - rays[i][1]];
             for(let j = 0;j < walls.length;j ++)
             {
                 let s = this.intersect(a, b, [walls[j][0], walls[j][1]], [walls[j][2] - walls[j][0], walls[j][3] - walls[j][1]]);
-                if(s != -1 && s < mins)
+                if(s != -1 && (mins == -1 || s < mins))
                     mins = s;
             }
-            if(0 < mins && mins < 1)
+            if(mins != -1)
             {
                 let w = [a[0] + mins * b[0], (a[1] + mins * b[1])];
                 circle(w[0], -w[1], 10);
