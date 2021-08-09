@@ -15,6 +15,7 @@ class Car
         this.ang = 0;
         this.speed = 0;
         this.ang_speed = 0;
+        this.sensordata = [];
     }
 
     input(forward, backward, left, right)
@@ -46,6 +47,7 @@ class Car
     {
         this.drawBody();
         this.drawRays();
+        this.drawSensorData();
     }
 
     drawBody()
@@ -68,6 +70,29 @@ class Car
         noFill();
         for(let i = 0;i < temp.length;i ++)
             line(temp[i][0], -temp[i][1], temp[i][2], -temp[i][3]);
+    }
+
+    drawSensorData()
+    {
+        let sx = 450;
+        let sy = -200;
+        stroke(0);
+        strokeWeight(2);
+        fill(255);
+        rect(sx - 120, sy - 120, 250, 250);
+        strokeWeight(1);
+        fill(0);
+        textSize(20);
+        textAlign(CENTER,CENTER);
+        text("SENSOR DATA", sx, sy);
+        text(round(this.sensordata[0], 1), sx, sy - 100); // N
+        text(round(this.sensordata[1], 1), sx, sy + 100); // S
+        text(round(this.sensordata[2], 1), sx - 100, sy); // W
+        text(round(this.sensordata[3], 1), sx + 100, sy); // E
+        text(round(this.sensordata[4], 1), sx + 100, sy - 100); // NE
+        text(round(this.sensordata[5], 1), sx + 100, sy + 100); // SE
+        text(round(this.sensordata[6], 1), sx - 100, sy - 100); // NW
+        text(round(this.sensordata[7], 1), sx - 100, sy + 100); // SW
     }
 
     getShapes()
@@ -129,6 +154,8 @@ class Car
         let rays = this.getRays();
         if(bounds)
             walls.push([-cx, cy, cx, cy], [cx + 1, cy + 1, cx, -cy], [cx, -cy, -cx, -cy], [-cx - 1, -cy - 1, -cx, cy]);
+        let sensordata = [];
+        let doReset = false;
         for(let i = 0;i < rays.length;i ++)
         {
             let mins = 1;
@@ -146,10 +173,15 @@ class Car
                 circle(w[0], -w[1], 10);
                 let dis = Math.sqrt(Math.pow(w[0] - a[0], 2) + Math.pow(w[1] - a[1], 2));
                 if(dis < crash_distance)
-                    return true;
+                    doReset = true;
             }
+            sensordata.push(mins);
         }
-        return false;
+        this.sensordata = sensordata;
+        if(doReset)
+            return true;
+        else
+            return false;
     }
 
     intersect(a, b, c, d)
