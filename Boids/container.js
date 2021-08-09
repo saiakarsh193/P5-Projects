@@ -18,7 +18,7 @@ class Container
         {
             this.boids[i].calculateHeading(bdata);
             this.boids[i].update();
-            this.boids[i].applyBound();
+            this.boids[i].applyBound(this.bound);
         }
     }
 
