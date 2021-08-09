@@ -1,12 +1,14 @@
 class Boid
 {
-    constructor(bound, speed = 5)
+    constructor(bound, speed, ndis, spread, coeff)
     {
-        this.speed = speed;
         this.pos = createVector(Math.random() * (bound[1] - bound[0]) + bound[0], Math.random() * (bound[3] - bound[2]) + bound[2]);
         this.angle = Math.random() * 2 * PI;
         this.gcolor = int(Math.random() * 115) + 140;
-        this.ndis = 50;
+        this.speed = speed;
+        this.ndis = ndis;
+        this.spread = spread;
+        this.coeff = coeff;
     }
 
     calculateHeading(bdata)
@@ -21,7 +23,7 @@ class Boid
         {
             let dir = p5.Vector.sub(bdata[i][0], this.pos);
             let dis = dir.mag();
-            if(dis > 0 && dis < this.ndis && abs(cdir.angleBetween(dir)) < (2 * PI / 3))
+            if(dis > 0 && dis < this.ndis && abs(cdir.angleBetween(dir)) < this.spread)
             {
                 if(min_dis == -1 || dis < min_dis)
                 {
@@ -38,7 +40,7 @@ class Boid
             avg_sep = avg_sep.heading();
             avg_align /= count;
             avg_coh = avg_coh.heading();
-            this.angle = (46 * this.angle + 2 * avg_sep + avg_align + avg_coh) / 50;
+            this.angle = (this.coeff[0] * this.angle + this.coeff[1] * avg_sep + this.coeff[2] * avg_align + this.coeff[3] * avg_coh) / this.coeff[4];
         }
     }
 

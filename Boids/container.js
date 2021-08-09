@@ -2,11 +2,15 @@ class Container
 {
     constructor(count, bound)
     {
+        this.boids = [];
         this.count = count;
         this.bound = bound;
-        this.boids = [];
+        this.speed = 5;
+        this.ndis = 50;
+        this.spread = (2 * PI / 3);
+        this.coeff = [46, 2, 1, 1, 50];
         for(let i = 0;i < this.count;i ++)
-            this.boids.push(new Boid(this.bound));
+            this.boids.push(new Boid(this.bound, this.speed, this.ndis, this.spread, this.coeff));
     }
 
     update()
