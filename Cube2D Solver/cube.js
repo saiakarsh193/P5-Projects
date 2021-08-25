@@ -93,6 +93,80 @@ class Cube
     }
   }
 
+  rotateMidClock(type)
+  {
+    if(type == 'E')
+    {
+      let temp = [this.cube[0][1][0], this.cube[0][1][1], this.cube[0][1][2]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[0][1][0 + i] = this.cube[3][1][0 + i];
+        this.cube[3][1][0 + i] = this.cube[2][1][0 + i];
+        this.cube[2][1][0 + i] = this.cube[1][1][0 + i];
+        this.cube[1][1][0 + i] = temp[0 + i];
+      }
+    }
+    else if(type == 'M')
+    {
+      let temp = [this.cube[0][0][1], this.cube[0][1][1], this.cube[0][2][1]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[0][0 + i][1] = this.cube[5][0 + i][1];
+        this.cube[5][0 + i][1] = this.cube[2][2 - i][1];
+        this.cube[2][2 - i][1] = this.cube[4][0 + i][1];
+        this.cube[4][0 + i][1] = temp[0 + i];
+      }
+    }
+    else if(type == 'S')
+    {
+      let temp = [this.cube[5][1][0], this.cube[5][1][1], this.cube[5][1][2]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[5][1][0 + i] = this.cube[3][2 - i][1];
+        this.cube[3][2 - i][1] = this.cube[4][1][2 - i];
+        this.cube[4][1][2 - i] = this.cube[1][0 + i][1];
+        this.cube[1][0 + i][1] = temp[0 + i];
+      }
+    }
+  }
+
+  rotateMidAntiClock(type)
+  {
+    if(type == 'E')
+    {
+      let temp = [this.cube[0][1][0], this.cube[0][1][1], this.cube[0][1][2]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[0][1][0 + i] = this.cube[1][1][0 + i];
+        this.cube[1][1][0 + i] = this.cube[2][1][0 + i];
+        this.cube[2][1][0 + i] = this.cube[3][1][0 + i];
+        this.cube[3][1][0 + i] = temp[0 + i];
+      }
+    }
+    else if(type == 'M')
+    {
+      let temp = [this.cube[0][0][1], this.cube[0][1][1], this.cube[0][2][1]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[0][0 + i][1] = this.cube[4][0 + i][1];
+        this.cube[4][0 + i][1] = this.cube[2][2 - i][1];
+        this.cube[2][2 - i][1] = this.cube[5][0 + i][1];
+        this.cube[5][0 + i][1] = temp[0 + i];
+      }
+    }
+    else if(type == 'S')
+    {
+      let temp = [this.cube[5][1][0], this.cube[5][1][1], this.cube[5][1][2]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[5][1][0 + i] = this.cube[1][0 + i][1];
+        this.cube[1][0 + i][1] = this.cube[4][1][2 - i];
+        this.cube[4][1][2 - i] = this.cube[3][2 - i][1];
+        this.cube[3][2 - i][1] = temp[0 + i];
+      }
+    }
+  }
+
   move(type)
   {
     if(type == 'U')
@@ -119,21 +193,133 @@ class Cube
       this.rotateClock(2);
     else if(type == 'BP')
       this.rotateAntiClock(2);
+    else if(type == 'E')
+      this.rotateMidClock('E')
+    else if(type == 'EP')
+      this.rotateMidAntiClock('E')
+    else if(type == 'M')
+      this.rotateMidClock('M')
+    else if(type == 'MP')
+      this.rotateMidAntiClock('M')
+    else if(type == 'S')
+      this.rotateMidClock('S')
+    else if(type == 'SP')
+      this.rotateMidAntiClock('S')
+    else if(type == 'x')
+    {
+      this.move('LP');
+      this.move('MP');
+      this.move('R');
+    }
+    else if(type == 'xP')
+    {
+      this.move('L');
+      this.move('M');
+      this.move('RP');
+    }
+    else if(type == 'y')
+    {
+      this.move('U');
+      this.move('EP');
+      this.move('DP');
+    }
+    else if(type == 'yP')
+    {
+      this.move('UP');
+      this.move('E');
+      this.move('D');
+    }
+    else if(type == 'z')
+    {
+      this.move('F');
+      this.move('S');
+      this.move('BP');
+    }
+    else if(type == 'zP')
+    {
+      this.move('FP');
+      this.move('SP');
+      this.move('B');
+    }
+    else if(type == 'u')
+    {
+      this.move('U');
+      this.move('EP');
+    }
+    else if(type == 'uP')
+    {
+      this.move('UP');
+      this.move('E');
+    }
+    else if(type == 'd')
+    {
+      this.move('D');
+      this.move('E');
+    }
+    else if(type == 'dP')
+    {
+      this.move('DP');
+      this.move('EP');
+    }
+    else if(type == 'r')
+    {
+      this.move('R');
+      this.move('MP');
+    }
+    else if(type == 'rP')
+    {
+      this.move('RP');
+      this.move('M');
+    }
+    else if(type == 'l')
+    {
+      this.move('L');
+      this.move('M');
+    }
+    else if(type == 'lP')
+    {
+      this.move('LP');
+      this.move('MP');
+    }
+    else if(type == 'f')
+    {
+      this.move('F');
+      this.move('S');
+    }
+    else if(type == 'fP')
+    {
+      this.move('FP');
+      this.move('SP');
+    }
+    else if(type == 'b')
+    {
+      this.move('B');
+      this.move('SP');
+    }
+    else if(type == 'bP')
+    {
+      this.move('BP');
+      this.move('S');
+    }
   }
 
   parseMoves(moves)
   {
-    // let xMap = {"U": "", "UP": "", "R": "", "RP": "", "U": "", "U": "", "U": ""}
+    let vMoves = ['U', 'D', 'R', 'L', 'F', 'B', 'E', 'M', 'S', 'x', 'y', 'z', 'u', 'd', 'r', 'l', 'f', 'b'];
+    let vwMoves = ['U', 'D', 'R', 'L', 'F', 'B'];
     let ans = [];
     for(let i = 0;i < moves.length;i ++)
     {
-      if(moves[i] == 'U' || moves[i] == 'D' || moves[i] == 'R' || moves[i] == 'L' || moves[i] == 'F' || moves[i] == 'B')
+      if(vMoves.indexOf(moves[i]) >= 0)
         ans.push(moves[i]);
-      else if(moves[i] == "'" || moves[i] == 'P' || moves[i] == '3' && ans.length > 0)
+      else if((moves[i] == "'" || moves[i] == 'P' || moves[i] == '3') && ans.length > 0 && vMoves.indexOf(ans[ans.length - 1]) >= 0)
         ans[ans.length - 1] += 'P';
       else if(moves[i] == '2' && ans.length > 0)
         ans.push(ans[ans.length - 1]);
+      else if(moves[i] == 'w' && ans.length > 0 && vwMoves.indexOf(ans[ans.length - 1]) >= 0)
+        ans[ans.length - 1] = ans[ans.length - 1].toLowerCase();
     }
+    print(ans);
     return ans;
   }
 
