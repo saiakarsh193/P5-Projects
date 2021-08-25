@@ -13,6 +13,25 @@ class Cube
     this.sideTooffsetmap = [[this.sx, this.sy], [this.sx + (3 * this.sw + this.ofst), this.sy], [this.sx + 2 * (3 * this.sw + this.ofst), this.sy], [this.sx - (3 * this.sw + this.ofst), this.sy], [this.sx, this.sy + (3 * this.sw + this.ofst)], [this.sx, this.sy - (3 * this.sw + this.ofst)]];
     this.setupCube();
     this.moves = [];
+    if(!String.prototype.splice)
+    {
+      /**
+       * {JSDoc}
+       *
+       * The splice() method changes the content of a string by removing a range of
+       * characters and/or adding new characters.
+       *
+       * @this {String}
+       * @param {number} start Index at which to start changing the string.
+       * @param {number} delCount An integer indicating the number of old chars to remove.
+       * @param {string} newSubStr The String that is spliced in.
+       * @return {string} A new string with the spliced substring.
+       */
+      String.prototype.splice = function(start, delCount, newSubStr)
+      {
+        return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
+      };
+    }
   }
 
   setupCube()
@@ -308,18 +327,54 @@ class Cube
     let vMoves = ['U', 'D', 'R', 'L', 'F', 'B', 'E', 'M', 'S', 'x', 'y', 'z', 'u', 'd', 'r', 'l', 'f', 'b'];
     let vwMoves = ['U', 'D', 'R', 'L', 'F', 'B'];
     let ans = [];
+    // Convert w moves to base moves
+    for(let i = 0;i < moves.length;i ++)
+    {
+      if(moves[i] == 'w')
+      {
+        moves = moves.splice(i, 1, "");
+        if(i > 0 && vwMoves.indexOf(moves[i - 1]) >= 0)
+        {
+          let nv = moves[i - 1].toLowerCase();
+          moves = moves.splice(i - 1, 1, nv);
+        }
+      }
+    }
+    // Convert outprimes to base moves
+    let cvm = -1;
     for(let i = 0;i < moves.length;i ++)
     {
       if(vMoves.indexOf(moves[i]) >= 0)
-        ans.push(moves[i]);
-      else if((moves[i] == "'" || moves[i] == 'P' || moves[i] == '3') && ans.length > 0 && vMoves.indexOf(ans[ans.length - 1]) >= 0)
-        ans[ans.length - 1] += 'P';
-      else if(moves[i] == '2' && ans.length > 0)
-        ans.push(ans[ans.length - 1]);
-      else if(moves[i] == 'w' && ans.length > 0 && vwMoves.indexOf(ans[ans.length - 1]) >= 0)
-        ans[ans.length - 1] = ans[ans.length - 1].toLowerCase();
+        cvm = i;
+      if(moves[i] == '\'' || moves[i] == 'P')
+      {
+        moves = moves.splice(i, 1, "");
+        if(cvm >= 0)
+        {
+          moves = moves.splice(cvm + 1, 0, "P");
+          cvm = -1;
+        }
+      }
     }
-    print(ans);
+    // Converting the characters into move blocks
+    for(let i = 0;i < moves.length;i ++)
+    {
+      if(vMoves.indexOf(moves[i]) >= 0)
+      {
+        let cm = moves[i];
+        let ctr = 1;
+        if(i + 1 < moves.length && moves[i + 1] == 'P')
+        {
+          cm += 'P';
+          ctr = 2;
+        }
+        let cnt = 1;
+        if(i + ctr < moves.length && moves[i + ctr] >= '0' && moves[i + ctr] <= '9')
+          cnt = moves[i + ctr].charCodeAt(0) - 48;
+        for(let j = 0;j < cnt;j ++)
+          ans.push(cm);
+      }
+    }
     return ans;
   }
 
