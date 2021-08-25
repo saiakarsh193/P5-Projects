@@ -9,7 +9,7 @@ function setup()
   cy = height / 2;
 
   cb = new Cube();
-  cb.doMoves("RUR'U'");
+  cb.doMoves("RU");
 }
 
 function draw()
