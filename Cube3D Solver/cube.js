@@ -57,13 +57,12 @@ class Cube
     this.cube[side][2][2] = temp[1];
     temp = [this.cube[this.orientation[side][0]][this.rotmap[side][0][0]][this.rotmap[side][0][1]], this.cube[this.orientation[side][0]][this.rotmap[side][1][0]][this.rotmap[side][1][1]], this.cube[this.orientation[side][0]][this.rotmap[side][2][0]][this.rotmap[side][2][1]]];
     for(let i = 0;i < 3;i ++)
+    {
       this.cube[this.orientation[side][0]][this.rotmap[side][0 + i][0]][this.rotmap[side][0 + i][1]] = this.cube[this.orientation[side][3]][this.rotmap[side][9 + i][0]][this.rotmap[side][9 + i][1]];
-    for(let i = 0;i < 3;i ++)
       this.cube[this.orientation[side][3]][this.rotmap[side][9 + i][0]][this.rotmap[side][9 + i][1]] = this.cube[this.orientation[side][2]][this.rotmap[side][6 + i][0]][this.rotmap[side][6 + i][1]];
-    for(let i = 0;i < 3;i ++)
       this.cube[this.orientation[side][2]][this.rotmap[side][6 + i][0]][this.rotmap[side][6 + i][1]] = this.cube[this.orientation[side][1]][this.rotmap[side][3 + i][0]][this.rotmap[side][3 + i][1]];
-    for(let i = 0;i < 3;i ++)
       this.cube[this.orientation[side][1]][this.rotmap[side][3 + i][0]][this.rotmap[side][3 + i][1]] = temp[0 + i];
+    }
   }
 
   rotateAntiClock(side)
@@ -79,13 +78,12 @@ class Cube
     this.cube[side][1][0] = temp[0];
     temp = [this.cube[this.orientation[side][0]][this.rotmap[side][0][0]][this.rotmap[side][0][1]], this.cube[this.orientation[side][0]][this.rotmap[side][1][0]][this.rotmap[side][1][1]], this.cube[this.orientation[side][0]][this.rotmap[side][2][0]][this.rotmap[side][2][1]]];
     for(let i = 0;i < 3;i ++)
+    {
       this.cube[this.orientation[side][0]][this.rotmap[side][0 + i][0]][this.rotmap[side][0 + i][1]] = this.cube[this.orientation[side][1]][this.rotmap[side][3 + i][0]][this.rotmap[side][3 + i][1]];
-    for(let i = 0;i < 3;i ++)
       this.cube[this.orientation[side][1]][this.rotmap[side][3 + i][0]][this.rotmap[side][3 + i][1]] = this.cube[this.orientation[side][2]][this.rotmap[side][6 + i][0]][this.rotmap[side][6 + i][1]];
-    for(let i = 0;i < 3;i ++)
       this.cube[this.orientation[side][2]][this.rotmap[side][6 + i][0]][this.rotmap[side][6 + i][1]] = this.cube[this.orientation[side][3]][this.rotmap[side][9 + i][0]][this.rotmap[side][9 + i][1]];
-    for(let i = 0;i < 3;i ++)
       this.cube[this.orientation[side][3]][this.rotmap[side][9 + i][0]][this.rotmap[side][9 + i][1]] = temp[0 + i];
+    }
   }
 
   move(type)
