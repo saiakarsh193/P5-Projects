@@ -16,5 +16,7 @@ function draw()
 {
   background(200);
   translate(cx, cy);
+  if(frameCount % 30 == 0)
+    cb.update();
   cb.draw();
 }

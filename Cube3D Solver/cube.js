@@ -12,6 +12,7 @@ class Cube
     this.cTocolormap = {"G": "green", "O": "orange", "B": "blue", "R": "red", "W": "white", "Y": "yellow"};
     this.sideTooffsetmap = [[this.sx, this.sy], [this.sx + (3 * this.sw + this.ofst), this.sy], [this.sx + 2 * (3 * this.sw + this.ofst), this.sy], [this.sx - (3 * this.sw + this.ofst), this.sy], [this.sx, this.sy + (3 * this.sw + this.ofst)], [this.sx, this.sy - (3 * this.sw + this.ofst)]];
     this.setupCube();
+    this.moves = [];
   }
 
   setupCube()
@@ -25,6 +26,12 @@ class Cube
           this.cube[side][row][col] = this.sideTocmap[side];
       }
     }
+  }
+
+  update()
+  {
+    if(this.moves.length > 0)
+      this.move(this.moves.splice(0, 1));
   }
 
   draw()
@@ -116,17 +123,16 @@ class Cube
 
   parseMoves(moves)
   {
+    // let xMap = {"U": "", "UP": "", "R": "", "RP": "", "U": "", "U": "", "U": ""}
     let ans = [];
     for(let i = 0;i < moves.length;i ++)
     {
       if(moves[i] == 'U' || moves[i] == 'D' || moves[i] == 'R' || moves[i] == 'L' || moves[i] == 'F' || moves[i] == 'B')
         ans.push(moves[i]);
-      else if(moves[i] == "'" || moves[i] == 'P' || moves[i] == '3')
+      else if(moves[i] == "'" || moves[i] == 'P' || moves[i] == '3' && ans.length > 0)
         ans[ans.length - 1] += 'P';
-      else if(moves[i] == '2')
+      else if(moves[i] == '2' && ans.length > 0)
         ans.push(ans[ans.length - 1]);
-      else
-        return [];
     }
     return ans;
   }
@@ -135,6 +141,6 @@ class Cube
   {
     moves = this.parseMoves(moves);
     for(let i = 0;i < moves.length;i ++)
-      this.move(moves[i]);
+      this.moves.push(moves[i]);
   }
 }
