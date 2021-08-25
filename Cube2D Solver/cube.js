@@ -47,29 +47,6 @@ class Cube
     }
   }
 
-  update()
-  {
-    if(this.moves.length > 0)
-      this.move(this.moves.splice(0, 1));
-  }
-
-  draw()
-  {
-    stroke(0);
-    strokeWeight(2);
-    for(let side = 0;side < 6;side ++)
-    {
-      for(let row = 0;row < 3; row ++)
-      {
-        for(let col = 0;col < 3; col ++)
-        {
-          fill(this.cTocolormap[this.cube[side][row][col]]);
-          rect(this.sideTooffsetmap[side][0] + col * this.sw, this.sideTooffsetmap[side][1] + row * this.sw, this.sw, this.sw, 4);
-        }
-      }
-    }
-  }
-
   rotateClock(side)
   {
     let temp = [this.cube[side][0][1], this.cube[side][0][2]];
@@ -378,10 +355,44 @@ class Cube
     return ans;
   }
 
-  doMoves(moves)
+  addMoves(moves)
   {
     moves = this.parseMoves(moves);
     for(let i = 0;i < moves.length;i ++)
       this.moves.push(moves[i]);
+  }
+
+  getFaces()
+  {
+    return this.cube;
+  }
+
+  draw()
+  {
+    stroke(0);
+    strokeWeight(2);
+    for(let side = 0;side < 6;side ++)
+    {
+      for(let row = 0;row < 3; row ++)
+      {
+        for(let col = 0;col < 3; col ++)
+        {
+          fill(this.cTocolormap[this.cube[side][row][col]]);
+          rect(this.sideTooffsetmap[side][0] + col * this.sw, this.sideTooffsetmap[side][1] + row * this.sw, this.sw, this.sw, 4);
+        }
+      }
+    }
+  }
+
+  update()
+  {
+    if(this.moves.length > 0)
+      this.move(this.moves.splice(0, 1));
+  }
+
+  updateAll()
+  {
+    while(this.moves.length > 0)
+      this.move(this.moves.splice(0, 1));
   }
 }

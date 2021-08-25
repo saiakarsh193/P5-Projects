@@ -9,7 +9,7 @@ function setup()
   cy = height / 2;
 
   cb = new Cube();
-  cb.doMoves("U'2");
+  cb.addMoves("U'2");
 }
 
 function draw()
