@@ -9,7 +9,7 @@ function setup()
   cy = height / 2;
 
   cb = new Cube();
-  cb.addMoves("U'2");
+  cb.addMoves(getScramble(10));
 }
 
 function draw()
