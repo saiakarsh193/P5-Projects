@@ -384,6 +384,14 @@ class Cube
     }
   }
 
+  movesEmpty()
+  {
+    if(this.moves.length == 0)
+      return true
+    else
+      return false
+  }
+
   update()
   {
     if(this.moves.length > 0)

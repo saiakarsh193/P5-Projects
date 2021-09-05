@@ -24,6 +24,5 @@ function getScramble(length)
             ctr = 1;
         }
     }
-    print(ans);
     return ans;
 }
