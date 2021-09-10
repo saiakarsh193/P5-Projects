@@ -1,12 +1,12 @@
 class Solver
 {
-    constructor()
-    {
-        this.stage = 0;
-    }
+	constructor()
+	{
+		this.stage = 0;
+	}
 
-    getMoves(faces)
-    {
-        return "";
-    }
+	getMoves(faces)
+	{
+		return "";
+	}
 }
