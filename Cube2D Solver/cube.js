@@ -12,6 +12,7 @@ class Cube
     this.cTocolormap = {"G": "green", "O": "orange", "B": "blue", "R": "red", "W": "white", "Y": "yellow"};
     this.sideTooffsetmap = [[this.sx, this.sy], [this.sx + (3 * this.sw + this.ofst), this.sy], [this.sx + 2 * (3 * this.sw + this.ofst), this.sy], [this.sx - (3 * this.sw + this.ofst), this.sy], [this.sx, this.sy + (3 * this.sw + this.ofst)], [this.sx, this.sy - (3 * this.sw + this.ofst)]];
     this.setupCube();
+    this.moves = [];
   }
 
   setupCube()
@@ -23,23 +24,6 @@ class Cube
       {
         for(let col = 0;col < 3; col ++)
           this.cube[side][row][col] = this.sideTocmap[side];
-      }
-    }
-  }
-
-  draw()
-  {
-    stroke(0);
-    strokeWeight(2);
-    for(let side = 0;side < 6;side ++)
-    {
-      for(let row = 0;row < 3; row ++)
-      {
-        for(let col = 0;col < 3; col ++)
-        {
-          fill(this.cTocolormap[this.cube[side][row][col]]);
-          rect(this.sideTooffsetmap[side][0] + col * this.sw, this.sideTooffsetmap[side][1] + row * this.sw, this.sw, this.sw, 4);
-        }
       }
     }
   }
@@ -86,6 +70,80 @@ class Cube
     }
   }
 
+  rotateMidClock(type)
+  {
+    if(type == 'E')
+    {
+      let temp = [this.cube[0][1][0], this.cube[0][1][1], this.cube[0][1][2]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[0][1][0 + i] = this.cube[3][1][0 + i];
+        this.cube[3][1][0 + i] = this.cube[2][1][0 + i];
+        this.cube[2][1][0 + i] = this.cube[1][1][0 + i];
+        this.cube[1][1][0 + i] = temp[0 + i];
+      }
+    }
+    else if(type == 'M')
+    {
+      let temp = [this.cube[0][0][1], this.cube[0][1][1], this.cube[0][2][1]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[0][0 + i][1] = this.cube[5][0 + i][1];
+        this.cube[5][0 + i][1] = this.cube[2][2 - i][1];
+        this.cube[2][2 - i][1] = this.cube[4][0 + i][1];
+        this.cube[4][0 + i][1] = temp[0 + i];
+      }
+    }
+    else if(type == 'S')
+    {
+      let temp = [this.cube[5][1][0], this.cube[5][1][1], this.cube[5][1][2]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[5][1][0 + i] = this.cube[3][2 - i][1];
+        this.cube[3][2 - i][1] = this.cube[4][1][2 - i];
+        this.cube[4][1][2 - i] = this.cube[1][0 + i][1];
+        this.cube[1][0 + i][1] = temp[0 + i];
+      }
+    }
+  }
+
+  rotateMidAntiClock(type)
+  {
+    if(type == 'E')
+    {
+      let temp = [this.cube[0][1][0], this.cube[0][1][1], this.cube[0][1][2]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[0][1][0 + i] = this.cube[1][1][0 + i];
+        this.cube[1][1][0 + i] = this.cube[2][1][0 + i];
+        this.cube[2][1][0 + i] = this.cube[3][1][0 + i];
+        this.cube[3][1][0 + i] = temp[0 + i];
+      }
+    }
+    else if(type == 'M')
+    {
+      let temp = [this.cube[0][0][1], this.cube[0][1][1], this.cube[0][2][1]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[0][0 + i][1] = this.cube[4][0 + i][1];
+        this.cube[4][0 + i][1] = this.cube[2][2 - i][1];
+        this.cube[2][2 - i][1] = this.cube[5][0 + i][1];
+        this.cube[5][0 + i][1] = temp[0 + i];
+      }
+    }
+    else if(type == 'S')
+    {
+      let temp = [this.cube[5][1][0], this.cube[5][1][1], this.cube[5][1][2]];
+      for(let i = 0;i < 3;i ++)
+      {
+        this.cube[5][1][0 + i] = this.cube[1][0 + i][1];
+        this.cube[1][0 + i][1] = this.cube[4][1][2 - i];
+        this.cube[4][1][2 - i] = this.cube[3][2 - i][1];
+        this.cube[3][2 - i][1] = temp[0 + i];
+      }
+    }
+  }
+
   move(type)
   {
     if(type == 'U')
@@ -112,29 +170,162 @@ class Cube
       this.rotateClock(2);
     else if(type == 'BP')
       this.rotateAntiClock(2);
-  }
-
-  parseMoves(moves)
-  {
-    let ans = [];
-    for(let i = 0;i < moves.length;i ++)
+    else if(type == 'E')
+      this.rotateMidClock('E')
+    else if(type == 'EP')
+      this.rotateMidAntiClock('E')
+    else if(type == 'M')
+      this.rotateMidClock('M')
+    else if(type == 'MP')
+      this.rotateMidAntiClock('M')
+    else if(type == 'S')
+      this.rotateMidClock('S')
+    else if(type == 'SP')
+      this.rotateMidAntiClock('S')
+    else if(type == 'x')
     {
-      if(moves[i] == 'U' || moves[i] == 'D' || moves[i] == 'R' || moves[i] == 'L' || moves[i] == 'F' || moves[i] == 'B')
-        ans.push(moves[i]);
-      else if(moves[i] == "'" || moves[i] == 'P' || moves[i] == '3')
-        ans[ans.length - 1] += 'P';
-      else if(moves[i] == '2')
-        ans.push(ans[ans.length - 1]);
-      else
-        return [];
+      this.move('LP');
+      this.move('MP');
+      this.move('R');
     }
-    return ans;
+    else if(type == 'xP')
+    {
+      this.move('L');
+      this.move('M');
+      this.move('RP');
+    }
+    else if(type == 'y')
+    {
+      this.move('U');
+      this.move('EP');
+      this.move('DP');
+    }
+    else if(type == 'yP')
+    {
+      this.move('UP');
+      this.move('E');
+      this.move('D');
+    }
+    else if(type == 'z')
+    {
+      this.move('F');
+      this.move('S');
+      this.move('BP');
+    }
+    else if(type == 'zP')
+    {
+      this.move('FP');
+      this.move('SP');
+      this.move('B');
+    }
+    else if(type == 'u')
+    {
+      this.move('U');
+      this.move('EP');
+    }
+    else if(type == 'uP')
+    {
+      this.move('UP');
+      this.move('E');
+    }
+    else if(type == 'd')
+    {
+      this.move('D');
+      this.move('E');
+    }
+    else if(type == 'dP')
+    {
+      this.move('DP');
+      this.move('EP');
+    }
+    else if(type == 'r')
+    {
+      this.move('R');
+      this.move('MP');
+    }
+    else if(type == 'rP')
+    {
+      this.move('RP');
+      this.move('M');
+    }
+    else if(type == 'l')
+    {
+      this.move('L');
+      this.move('M');
+    }
+    else if(type == 'lP')
+    {
+      this.move('LP');
+      this.move('MP');
+    }
+    else if(type == 'f')
+    {
+      this.move('F');
+      this.move('S');
+    }
+    else if(type == 'fP')
+    {
+      this.move('FP');
+      this.move('SP');
+    }
+    else if(type == 'b')
+    {
+      this.move('B');
+      this.move('SP');
+    }
+    else if(type == 'bP')
+    {
+      this.move('BP');
+      this.move('S');
+    }
   }
 
-  doMoves(moves)
+  addMoves(moves, condense = true)
   {
-    moves = this.parseMoves(moves);
+    moves = parseFormula(moves, condense);
     for(let i = 0;i < moves.length;i ++)
-      this.move(moves[i]);
+      this.moves.push(moves[i]);
+  }
+
+  getFaces()
+  {
+    return this.cube;
+  }
+
+  draw()
+  {
+    stroke(0);
+    strokeWeight(2);
+    for(let side = 0;side < 6;side ++)
+    {
+      for(let row = 0;row < 3; row ++)
+      {
+        for(let col = 0;col < 3; col ++)
+        {
+          fill(this.cTocolormap[this.cube[side][row][col]]);
+          rect(this.sideTooffsetmap[side][0] + col * this.sw, this.sideTooffsetmap[side][1] + row * this.sw, this.sw, this.sw, 4);
+        }
+      }
+    }
+  }
+
+  movesEmpty()
+  {
+    if(this.moves.length == 0)
+      return true
+    else
+      return false
+  }
+
+  update()
+  {
+    if(this.moves.length > 0)
+      this.move(this.moves.splice(0, 1));
+  }
+
+  updateAll()
+  {
+    while(this.moves.length > 0)
+      this.move(this.moves.splice(0, 1));
   }
 }
