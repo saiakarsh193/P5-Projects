@@ -10,5 +10,9 @@ function draw()
 {
   background(200);
   rob.draw();
-  rob.update(deltaTime / 1000);
+}
+
+function mouseMoved()
+{
+  rob.update([mouseX, mouseY]);
 }

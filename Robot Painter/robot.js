@@ -2,47 +2,78 @@ class robot
 {
     constructor()
     {
+        // total screen size is (20, 10) for scale = 77
         this.scale = 77;
-        this.main_frame_position = createVector(0.25, 0.25);
-        // total screen size is (20, 10)
-        this.main_frame_size = createVector(19.25, 9.5);
-        this.main_frame_bar_size = createVector(this.main_frame_size.x, this.main_frame_size.y * 0.03);
-        this.sec_frame_position_factor = 0;
-        this.sec_frame_size = createVector(this.main_frame_size.x * 0.2, this.main_frame_size.y);
-        this.sec_frame_bar_size = createVector(this.main_frame_size.x * 0.01, this.main_frame_size.y);
-        this.ter_frame_position_factor = 0;
-        this.ter_frame_size = createVector(this.sec_frame_size.x, this.sec_frame_size.x);
-        // this.ter_frame_bar_size = createVector(this.main_frame_size.x * 0.01, this.main_frame_size.y);
+        this.segments = [5, 10];
+        this.f1_dims = [19, 9];
+        this.f1_centre = [(this.f1_dims[0] / 2) + 0.4, (this.f1_dims[1] / 2) + 0.5];
+        this.f2_width = this.f1_dims[0] / this.segments[1];
+        this.f2_x = this.f1_centre[0];
+        this.f3_height = this.f1_dims[1] / this.segments[0];
+        this.f3_y = this.f1_centre[1];
     }
 
-    update(dT)
+    f23ToSeg(row, col)
     {
-        this.sec_frame_position_factor = constrain(this.sec_frame_position_factor + dT * 0.1, 0, 1)
+        this.f2_x = this.cmap(col, 0, this.segments[1] - 1, this.f1_centre[0] - (this.f1_dims[0] / 2) + (this.f2_width / 2), this.f1_centre[0] + (this.f1_dims[0] / 2) - (this.f2_width / 2));
+        this.f3_y = this.cmap(row, 0, this.segments[0] - 1, this.f1_centre[1] - (this.f1_dims[1] / 2) + (this.f3_height / 2), this.f1_centre[1] + (this.f1_dims[1] / 2) - (this.f3_height / 2));
+    }
+
+    neatCoord(coord)
+    {
+        coord[0] = (coord[0] / this.scale);
+        coord[1] = (coord[1] / this.scale);
+        coord[0] = this.cmap(coord[0], this.f1_centre[0] - (this.f1_dims[0] / 2), this.f1_centre[0] + (this.f1_dims[0] / 2), 0, this.f1_dims[0]);
+        coord[1] = this.cmap(coord[1], this.f1_centre[1] - (this.f1_dims[1] / 2), this.f1_centre[1] + (this.f1_dims[1] / 2), 0, this.f1_dims[1]);
+        return coord;
+    }
+
+    update(coord)
+    {
+        coord = this.neatCoord(coord);
+        let segs = [int(coord[1] * this.segments[0] / this.f1_dims[1]), int(coord[0] * this.segments[1] / this.f1_dims[0])];
+        this.f23ToSeg(segs[0], segs[1]);
     }
 
     draw()
     {
-        noStroke();
-        // main frame
-        fill(0);
-        this.rect(this.main_frame_position, this.main_frame_bar_size);
-        this.rect(p5.Vector.add(this.main_frame_position, createVector(0, this.main_frame_size.y - this.main_frame_bar_size.y)), this.main_frame_bar_size);
-        // secondary frame
-        let sec_left = (this.main_frame_size.x - this.sec_frame_size.x) * this.sec_frame_position_factor + this.main_frame_position.x;
-        this.rect(createVector(sec_left, this.main_frame_position.y), this.sec_frame_bar_size);
-        this.rect(createVector(sec_left + this.sec_frame_size.x - this.sec_frame_bar_size.x, this.main_frame_position.y), this.sec_frame_bar_size);
-        // tertiary frame
-        let ter_left = (this.main_frame_size.x - this.sec_frame_size.x) * this.sec_frame_position_factor + this.main_frame_position.x;
-        fill(100);
-        this.rect(createVector(sec_left, this.main_frame_position.y), this.sec_frame_bar_size);
+        stroke(0);
+        strokeWeight(2);
+        rectMode(CENTER);
+        fill(100)
+        this.rect(this.f1_centre[0], this.f1_centre[1], this.f1_dims[0], this.f1_dims[1]);
+        fill(255, 41, 201);
+        this.rect(this.f1_centre[0], this.f1_centre[1] - (this.f1_dims[1] / 2) + 0.15, this.f1_dims[0], 0.15 * 2);
+        this.rect(this.f1_centre[0], this.f1_centre[1] + (this.f1_dims[1] / 2) - 0.15, this.f1_dims[0], 0.15 * 2);
+        this.rect(this.f2_x - (this.f2_width / 2) + 0.1, this.f1_centre[1], 0.1 * 2, this.f1_dims[1]);
+        this.rect(this.f2_x + (this.f2_width / 2) - 0.1, this.f1_centre[1], 0.1 * 2, this.f1_dims[1]);
+        this.rect(this.f2_x, this.f3_y - (this.f3_height / 2) + 0.1, this.f2_width, 0.1 * 2);
+        this.rect(this.f2_x, this.f3_y + (this.f3_height / 2) - 0.1, this.f2_width, 0.1 * 2);
+        rectMode(CORNER);
     }
 
-    line(vec1, vec2)
+    cmap(n, a, b, A, B)
+    {
+        n = constrain(n, a, b);
+        return map(n, a, b, A, B);
+    }
+
+    line(x1, y1, x2, y2)
+    {
+        line(x1 * this.scale, y1 * this.scale, x2 * this.scale, y2 * this.scale);
+    }
+
+    rect(x, y, w, h)
+    {
+        rect(x * this.scale, y * this.scale, w * this.scale, h * this.scale);
+    }
+
+    lineV(vec1, vec2)
     {
         line(vec1.x * this.scale, vec1.y * this.scale, vec2.x * this.scale, vec2.y * this.scale);
     }
 
-    rect(vec, size)
+    rectV(vec, size)
     {
         rect(vec.x * this.scale, vec.y * this.scale, size.x * this.scale, size.y * this.scale);
     }
