@@ -11,10 +11,14 @@ class robot
         this.f2_x = this.f1_centre[0];
         this.f3_height = this.f1_dims[1] / this.segments[0];
         this.f3_y = this.f1_centre[1];
+        this.current_seg = [0, 0];
+        this.current_coord = [0, 0];
     }
 
-    f23ToSeg(row, col)
+    f23ToSeg(seg)
     {
+        let row = seg[0];
+        let col = seg[1];
         this.f2_x = this.cmap(col, 0, this.segments[1] - 1, this.f1_centre[0] - (this.f1_dims[0] / 2) + (this.f2_width / 2), this.f1_centre[0] + (this.f1_dims[0] / 2) - (this.f2_width / 2));
         this.f3_y = this.cmap(row, 0, this.segments[0] - 1, this.f1_centre[1] - (this.f1_dims[1] / 2) + (this.f3_height / 2), this.f1_centre[1] + (this.f1_dims[1] / 2) - (this.f3_height / 2));
     }
@@ -28,11 +32,16 @@ class robot
         return coord;
     }
 
+    getSeg(coord)
+    {
+        return [int(coord[1] * this.segments[0] / this.f1_dims[1]), int(coord[0] * this.segments[1] / this.f1_dims[0])];
+    }
+
     update(coord)
     {
-        coord = this.neatCoord(coord);
-        let segs = [int(coord[1] * this.segments[0] / this.f1_dims[1]), int(coord[0] * this.segments[1] / this.f1_dims[0])];
-        this.f23ToSeg(segs[0], segs[1]);
+        this.current_coord = this.neatCoord(coord);
+        this.current_seg = this.getSeg(this.current_coord);
+        this.f23ToSeg(this.current_seg);
     }
 
     draw()
@@ -52,6 +61,9 @@ class robot
         fill(34, 198, 240);
         this.rect(this.f2_x, this.f3_y - (this.f3_height / 2) + 0.1, this.f2_width, 0.1 * 2);
         this.rect(this.f2_x, this.f3_y + (this.f3_height / 2) - 0.1, this.f2_width, 0.1 * 2);
+        this.rect(this.current_coord[0] + this.f1_centre[0] - (this.f1_dims[0] / 2), this.f3_y, 0.1, this.f3_height);
+        this.rect(this.f2_x, this.current_coord[1] + this.f1_centre[1] - (this.f1_dims[1] / 2), this.f2_width, 0.1);
+        this.rect(this.current_coord[0] + this.f1_centre[0] - (this.f1_dims[0] / 2), this.current_coord[1] + this.f1_centre[1] - (this.f1_dims[1] / 2), 0.3, 0.3);
         rectMode(CORNER);
     }
 
