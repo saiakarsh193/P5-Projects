@@ -37,16 +37,19 @@ class robot
 
     draw()
     {
+        rectMode(CENTER);
+        noStroke();
+        fill(200);
+        this.rect(this.f1_centre[0], this.f1_centre[1], this.f1_dims[0], this.f1_dims[1]);
         stroke(0);
         strokeWeight(2);
-        rectMode(CENTER);
-        fill(100)
-        this.rect(this.f1_centre[0], this.f1_centre[1], this.f1_dims[0], this.f1_dims[1]);
-        fill(255, 41, 201);
+        fill(0);
         this.rect(this.f1_centre[0], this.f1_centre[1] - (this.f1_dims[1] / 2) + 0.15, this.f1_dims[0], 0.15 * 2);
         this.rect(this.f1_centre[0], this.f1_centre[1] + (this.f1_dims[1] / 2) - 0.15, this.f1_dims[0], 0.15 * 2);
+        fill(255, 41, 201);
         this.rect(this.f2_x - (this.f2_width / 2) + 0.1, this.f1_centre[1], 0.1 * 2, this.f1_dims[1]);
         this.rect(this.f2_x + (this.f2_width / 2) - 0.1, this.f1_centre[1], 0.1 * 2, this.f1_dims[1]);
+        fill(34, 198, 240);
         this.rect(this.f2_x, this.f3_y - (this.f3_height / 2) + 0.1, this.f2_width, 0.1 * 2);
         this.rect(this.f2_x, this.f3_y + (this.f3_height / 2) - 0.1, this.f2_width, 0.1 * 2);
         rectMode(CORNER);
