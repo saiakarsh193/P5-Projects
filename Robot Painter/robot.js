@@ -18,18 +18,14 @@ class robot
 
     f23ToSeg(seg)
     {
-        let row = seg[0];
-        let col = seg[1];
-        this.f2_x = this.cmap(col, 0, this.segments[1] - 1, this.f1_centre[0] - (this.f1_dims[0] / 2) + (this.f2_width / 2), this.f1_centre[0] + (this.f1_dims[0] / 2) - (this.f2_width / 2));
-        this.f3_y = this.cmap(row, 0, this.segments[0] - 1, this.f1_centre[1] - (this.f1_dims[1] / 2) + (this.f3_height / 2), this.f1_centre[1] + (this.f1_dims[1] / 2) - (this.f3_height / 2));
+        this.f2_x = this.cmap(seg[1], 0, this.segments[1] - 1, this.f1_centre[0] - (this.f1_dims[0] / 2) + (this.f2_width / 2), this.f1_centre[0] + (this.f1_dims[0] / 2) - (this.f2_width / 2));
+        this.f3_y = this.cmap(seg[0], 0, this.segments[0] - 1, this.f1_centre[1] - (this.f1_dims[1] / 2) + (this.f3_height / 2), this.f1_centre[1] + (this.f1_dims[1] / 2) - (this.f3_height / 2));
     }
 
     neatCoord(coord)
     {
-        coord[0] = (coord[0] / this.scale);
-        coord[1] = (coord[1] / this.scale);
-        coord[0] = this.cmap(coord[0], this.f1_centre[0] - (this.f1_dims[0] / 2), this.f1_centre[0] + (this.f1_dims[0] / 2), 0, this.f1_dims[0]);
-        coord[1] = this.cmap(coord[1], this.f1_centre[1] - (this.f1_dims[1] / 2), this.f1_centre[1] + (this.f1_dims[1] / 2), 0, this.f1_dims[1]);
+        coord[0] = this.cmap(coord[0] / this.scale, this.f1_centre[0] - (this.f1_dims[0] / 2), this.f1_centre[0] + (this.f1_dims[0] / 2), 0, this.f1_dims[0]);
+        coord[1] = this.cmap(coord[1] / this.scale, this.f1_centre[1] - (this.f1_dims[1] / 2), this.f1_centre[1] + (this.f1_dims[1] / 2), 0, this.f1_dims[1]);
         return coord;
     }
 
@@ -66,7 +62,8 @@ class robot
     {
         this.current_coord = this.neatCoord(coord);
         this.target_seg = this.getSeg(this.current_coord);
-        // this.f23ToSeg(this.current_seg);
+        this.current_coord[0] = constrain(this.current_coord[0] + this.f1_centre[0] - (this.f1_dims[0] / 2), this.f2_x - (this.f2_width / 2), this.f2_x + (this.f2_width / 2)) - (this.f1_centre[0] - (this.f1_dims[0] / 2));
+        this.current_coord[1] = constrain(this.current_coord[1] + this.f1_centre[1] - (this.f1_dims[1] / 2), this.f3_y - (this.f3_height / 2), this.f3_y + (this.f3_height / 2)) - (this.f1_centre[1] - (this.f1_dims[1] / 2));
     }
 
     draw()

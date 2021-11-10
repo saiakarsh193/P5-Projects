@@ -9,7 +9,7 @@ function setup()
 function draw()
 {
   background(255);
-  rob.draw();
   rob.animateArms();
+  rob.draw();
   rob.updateTarget([mouseX, mouseY]);
 }
