@@ -6,10 +6,7 @@ function setup()
 {
   createCanvas(1520, 770);
   rob = new robot();
-  frameRate(10);
-  data = makeInstructions(getImage());
-  // for(let i = 0;i < data.length;i ++)
-  //   circle(data[i][0], data[i][1], 10);
+  data = makeInstructions(getImage(40, 30));
   ctr = 0;
 }
 
@@ -18,9 +15,9 @@ function draw()
   background(255);
   rob.animateArms();
   rob.draw();
-  // if(frameCount % 40 == 0)
-    // rob.updateTarget(data[ctr ++]);
-  rob.updateTarget([mouseX, mouseY]);
+  rob.updateTarget(data[ctr]);
+  if(frameCount % 10 == 0)
+    ctr ++;
 }
 
 function makeInstructions(img)
@@ -40,7 +37,7 @@ function makeInstructions(img)
   return data;
 }
 
-function getImage()
+function getImage(width, height)
 {
-  return new Array(10).fill(0).map((v1, i) => new Array(8).fill(0).map((v2, j) => i + j));
+  return new Array(height).fill(0).map((v1, i) => new Array(width).fill(0).map((v2, j) => i + j));
 }
