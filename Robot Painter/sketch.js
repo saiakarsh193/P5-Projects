@@ -10,9 +10,6 @@ function draw()
 {
   background(255);
   rob.draw();
-}
-
-function mouseMoved()
-{
-  rob.update([mouseX, mouseY]);
+  rob.animateArms();
+  rob.updateTarget([mouseX, mouseY]);
 }

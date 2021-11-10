@@ -11,8 +11,9 @@ class robot
         this.f2_x = this.f1_centre[0];
         this.f3_height = this.f1_dims[1] / this.segments[0];
         this.f3_y = this.f1_centre[1];
-        this.current_seg = [0, 0];
         this.current_coord = [0, 0];
+        this.current_seg = [0, 0];
+        this.target_seg = [0, 0];
     }
 
     f23ToSeg(seg)
@@ -37,11 +38,35 @@ class robot
         return [int(coord[1] * this.segments[0] / this.f1_dims[1]), int(coord[0] * this.segments[1] / this.f1_dims[0])];
     }
 
-    update(coord)
+    animateArms()
+    {
+        let delta = [this.target_seg[0] - this.current_seg[0], this.target_seg[1] - this.current_seg[1]];
+        let rate = 0.05;
+        let threshold = 0.01;
+        if(Math.abs(delta[0]) < threshold)
+        {
+            this.current_seg[0] = this.target_seg[0];
+        }
+        else
+        {
+            this.current_seg[0] += rate * delta[0];
+        }
+        if(Math.abs(delta[1]) < threshold)
+        {
+            this.current_seg[1] = this.target_seg[1];
+        }
+        else
+        {
+            this.current_seg[1] += rate * delta[1];
+        }
+        this.f23ToSeg(this.current_seg);
+    }
+
+    updateTarget(coord)
     {
         this.current_coord = this.neatCoord(coord);
-        this.current_seg = this.getSeg(this.current_coord);
-        this.f23ToSeg(this.current_seg);
+        this.target_seg = this.getSeg(this.current_coord);
+        // this.f23ToSeg(this.current_seg);
     }
 
     draw()
