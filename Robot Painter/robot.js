@@ -6,7 +6,8 @@ class robot
         this.scale = 77;
         this.segments = [5, 10];
         this.f1_dims = [19, 9];
-        this.f1_centre = [(this.f1_dims[0] / 2) + 0.4, (this.f1_dims[1] / 2) + 0.5];
+        this.offset = [0.4, 0.5];
+        this.f1_centre = [(this.f1_dims[0] / 2) + this.offset[0], (this.f1_dims[1] / 2) + this.offset[1]];
         this.f2_width = this.f1_dims[0] / this.segments[1];
         this.f2_x = this.f1_centre[0];
         this.f3_height = this.f1_dims[1] / this.segments[0];
@@ -14,6 +15,7 @@ class robot
         this.current_coord = [0, 0];
         this.current_seg = [0, 0];
         this.target_seg = [0, 0];
+        this.f23ToSeg(this.current_seg);
     }
 
     f23ToSeg(seg)
@@ -60,7 +62,7 @@ class robot
 
     updateTarget(coord)
     {
-        this.current_coord = this.neatCoord(coord);
+        this.current_coord = this.neatCoord([...coord]);
         this.target_seg = this.getSeg(this.current_coord);
         this.current_coord[0] = constrain(this.current_coord[0] + this.f1_centre[0] - (this.f1_dims[0] / 2), this.f2_x - (this.f2_width / 2), this.f2_x + (this.f2_width / 2)) - (this.f1_centre[0] - (this.f1_dims[0] / 2));
         this.current_coord[1] = constrain(this.current_coord[1] + this.f1_centre[1] - (this.f1_dims[1] / 2), this.f3_y - (this.f3_height / 2), this.f3_y + (this.f3_height / 2)) - (this.f1_centre[1] - (this.f1_dims[1] / 2));
