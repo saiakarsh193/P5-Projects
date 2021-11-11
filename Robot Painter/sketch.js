@@ -34,12 +34,14 @@ function makeInstructions(img)
   noStroke(0);
   let data = [];
   let x_units = img[0].length;
+  let x_stride = int(x_units / rob.segments[1]);
   let y_units = img.length;
-  for(let i = 0;i < y_units;i ++)
+  for(let j = 0;j < x_units;j += x_stride)
   {
-    for(let j = 0;j < x_units;j ++)
+    for(let i = 0;i < y_units;i ++)
     {
-      data.push([map(j, 0, x_units - 1, rob.offset[0], rob.offset[0] + rob.f1_dims[0]) * rob.scale, map(i, 0, y_units - 1, rob.offset[1], rob.offset[1] + rob.f1_dims[1]) * rob.scale]);
+      for(let k = j;k < j + x_stride;k ++)
+        data.push([map(k, 0, x_units - 1, rob.offset[0], rob.offset[0] + rob.f1_dims[0]) * rob.scale, map(i, 0, y_units - 1, rob.offset[1], rob.offset[1] + rob.f1_dims[1]) * rob.scale]);
     }
   }
   return data;
