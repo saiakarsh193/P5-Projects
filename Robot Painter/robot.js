@@ -39,8 +39,8 @@ class robot
     animateArms()
     {
         let delta = [this.target_seg[0] - this.current_seg[0], this.target_seg[1] - this.current_seg[1]];
-        let rate = 0.05;
-        let threshold = 0.01;
+        let rate = 0.1;
+        let threshold = 0.04;
         if(Math.abs(delta[0]) < threshold)
         {
             this.current_seg[0] = this.target_seg[0];
@@ -58,14 +58,18 @@ class robot
             this.current_seg[1] += rate * delta[1];
         }
         this.f23ToSeg(this.current_seg);
+        this.current_coord[0] = constrain(this.current_coord[0] + this.f1_centre[0] - (this.f1_dims[0] / 2), this.f2_x - (this.f2_width / 2), this.f2_x + (this.f2_width / 2)) - (this.f1_centre[0] - (this.f1_dims[0] / 2));
+        this.current_coord[1] = constrain(this.current_coord[1] + this.f1_centre[1] - (this.f1_dims[1] / 2), this.f3_y - (this.f3_height / 2), this.f3_y + (this.f3_height / 2)) - (this.f1_centre[1] - (this.f1_dims[1] / 2));
+        if(this.current_seg[0] == this.target_seg[0] && this.current_seg[1] == this.target_seg[1])
+            return true;
+        else
+            return false;
     }
 
     updateTarget(coord)
     {
         this.current_coord = this.neatCoord([...coord]);
         this.target_seg = this.getSeg(this.current_coord);
-        this.current_coord[0] = constrain(this.current_coord[0] + this.f1_centre[0] - (this.f1_dims[0] / 2), this.f2_x - (this.f2_width / 2), this.f2_x + (this.f2_width / 2)) - (this.f1_centre[0] - (this.f1_dims[0] / 2));
-        this.current_coord[1] = constrain(this.current_coord[1] + this.f1_centre[1] - (this.f1_dims[1] / 2), this.f3_y - (this.f3_height / 2), this.f3_y + (this.f3_height / 2)) - (this.f1_centre[1] - (this.f1_dims[1] / 2));
     }
 
     draw()

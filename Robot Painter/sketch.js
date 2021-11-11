@@ -1,6 +1,8 @@
 let rob;
 let data;
 let ctr;
+let cTime;
+let lastMove;
 
 function setup()
 {
@@ -8,16 +10,22 @@ function setup()
   rob = new robot();
   data = makeInstructions(getImage(40, 30));
   ctr = 0;
+  cTime = 0;
+  lastMove = 0;
 }
 
 function draw()
 {
   background(255);
-  rob.animateArms();
+  let reached = rob.animateArms();
   rob.draw();
-  rob.updateTarget(data[ctr]);
-  if(frameCount % 10 == 0)
+  if(reached && cTime - lastMove > 0.1)
+  {
+    rob.updateTarget(data[ctr]);
+    lastMove = cTime;
     ctr ++;
+  }
+  cTime += deltaTime / 1000;
 }
 
 function makeInstructions(img)
