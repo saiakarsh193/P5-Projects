@@ -1,6 +1,5 @@
 let cx, cy;
 let rad;
-let dt = [];
 
 class Radar
 {
@@ -11,6 +10,7 @@ class Radar
     this.segments = segments;
     this.current_angle = 0;
     this.angle_rate = 0.8;
+    this.dots = [];
     this.makeOverlay();
     angleMode(DEGREES);
     imageMode(CORNER);
@@ -24,7 +24,7 @@ class Radar
     this.overlay.background(175, 175, 175, 0);
     this.overlay.translate(cx, cy);
     this.overlay.strokeWeight(2);
-    this.overlay.textSize(10);
+    this.overlay.textSize(11);
     // inner number of rings (does not count the outer rim)
     for(let i = 1;i <= nor;i ++)
     {
@@ -78,24 +78,36 @@ class Radar
     }
   }
 
-  draw(doLine=false)
+  draw()
   {
     image(this.overlay, 0, 0, width, height);
     translate(cx, cy);
-    if(doLine)
-    {
-      stroke(0, 255, 0);
-      strokeWeight(3);
-      noFill();
-      line(0, 0, this.radius * cos(this.current_angle), this.radius * sin(this.current_angle));
-    }
+    // pointer
+    stroke(0, 255, 0);
+    strokeWeight(2);
+    noFill();
+    line(0, 0, (this.radius + 15) * cos(this.current_angle), (this.radius + 15) * sin(this.current_angle));
+    // spread
     noStroke();
     for(let i = 0;i < this.segments;i ++)
     {
-      fill(0, 255, 0, map(i, 0, this.segments - 1, 200, 0));
+      fill(0, 255, 0, map(i, 0, this.segments - 1, 255, 0));
       arc(0, 0, 2 * this.radius, 2 * this.radius, this.current_angle - (i + 1) * (this.spread / this.segments), this.current_angle - i * (this.spread / this.segments));
     }
     this.current_angle = (this.current_angle + this.angle_rate) % 360;
+    // dots
+    for(let i = this.dots.length - 1;i >=0;i --)
+    {
+      if(this.dots[i].life > 0)
+        this.dots[i].draw();
+      else
+        this.dots.splice(i, 1);
+    }
+  }
+
+  addDot(x, y)
+  {
+    this.dots.push(new Dot(x, y));
   }
 }
 
@@ -111,9 +123,21 @@ class Dot
 
   draw()
   {
+    let w = 8;
+    let d = 4;
     noStroke();
-    fill(0, 255, 0, map(this.life, this.max_life, 0, 255, 60));
-    circle(this.x, this.y, 10);
+    fill(0, 255, 0, map(this.life, this.max_life, 0, 255, 20));
+    circle(this.x, this.y, 1.3 * w);
+    noFill();
+    stroke(0, 255, 0, map(this.life, this.max_life, 0, 255, 0));
+    line(this.x - w, this.y - w, this.x - d, this.y - w);
+    line(this.x + d, this.y - w, this.x + w, this.y - w);
+    line(this.x - w, this.y + w, this.x - d, this.y + w);
+    line(this.x + d, this.y + w, this.x + w, this.y + w);
+    line(this.x - w, this.y - w, this.x - w, this.y - d);
+    line(this.x - w, this.y + w, this.x - w, this.y + d);
+    line(this.x + w, this.y - w, this.x + w, this.y - d);
+    line(this.x + w, this.y + w, this.x + w, this.y + d);
     this.life --;
     if(this.life < 0)
       this.life = this.max_life;
@@ -134,17 +158,10 @@ function draw()
 {
   background(0);
   rad.draw();
-  for(let i = dt.length - 1;i >=0;i --)
-  {
-    if(dt[i].life > 0)
-      dt[i].draw();
-    else
-      dt.splice(i, 1);
-  }
   if(random() > 0.98)
   {
     let trad = map(random(), 0, 1, 0, rad.radius);
     let tang = rad.current_angle;
-    dt.push(new Dot(trad * cos(tang), trad * sin(tang)));
+    rad.addDot(trad * cos(tang), trad * sin(tang));
   }
 }
