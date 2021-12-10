@@ -11,6 +11,7 @@ class Radar
     this.current_angle = 0;
     this.angle_rate = 0.8;
     this.dots = [];
+    this.pcolor = [0, 255, 0];
     this.makeOverlay();
     angleMode(DEGREES);
     imageMode(CORNER);
@@ -30,9 +31,9 @@ class Radar
     {
       let r = i * this.radius / (nor + 1);
       this.overlay.noFill();
-      this.overlay.stroke(0, 255, 0);
+      this.overlay.stroke(this.pcolor[0], this.pcolor[1], this.pcolor[2]);
       this.overlay.circle(0, 0, 2 * r);
-      this.overlay.fill(0, 255, 0);
+      this.overlay.fill(this.pcolor[0], this.pcolor[1], this.pcolor[2]);
       this.overlay.noStroke();
       this.overlay.textAlign(LEFT);
       this.overlay.text(r, r + 3, 0);
@@ -41,7 +42,7 @@ class Radar
     }
     // outer rim
     this.overlay.noFill();
-    this.overlay.stroke(0, 255, 0);
+    this.overlay.stroke(this.pcolor[0], this.pcolor[1], this.pcolor[2]);
     this.overlay.strokeWeight(3);
     this.overlay.circle(0, 0, 2 * this.radius);
     this.overlay.textAlign(CENTER, CENTER);
@@ -51,14 +52,14 @@ class Radar
     for(let a = 0;a < 2 * Math.PI - del; a += del)
     {
       this.overlay.noFill();
-      this.overlay.stroke(0, 255, 0);
+      this.overlay.stroke(this.pcolor[0], this.pcolor[1], this.pcolor[2]);
       this.overlay.strokeWeight(2);
       this.overlay.line(this.radius * cos(a), this.radius * sin(a), (this.radius + 5) * cos(a), (this.radius + 5) * sin(a));
       if(ctr % delang == 0)
       {
         this.overlay.strokeWeight(3);
         this.overlay.line(this.radius * cos(a), this.radius * sin(a), (this.radius + 10) * cos(a), (this.radius + 10) * sin(a));
-        this.overlay.fill(0, 255, 0);
+        this.overlay.fill(this.pcolor[0], this.pcolor[1], this.pcolor[2]);
         this.overlay.noStroke();
         this.overlay.text(ctr, (this.radius + 25) * cos(a), (this.radius + 25) * sin(a));
       }
@@ -66,10 +67,10 @@ class Radar
     }
     // filler
     this.overlay.noStroke();
-    this.overlay.fill(0, 255, 0, 50);
+    this.overlay.fill(this.pcolor[0], this.pcolor[1], this.pcolor[2], 50);
     this.overlay.circle(0, 0, 2 * this.radius);
     this.overlay.noFill();
-    this.overlay.stroke(0, 255, 0, 50);
+    this.overlay.stroke(this.pcolor[0], this.pcolor[1], this.pcolor[2], 50);
     this.overlay.strokeWeight(2);
     del = Math.PI * 2 / 12;
     for(let a = 0;a < 2 * Math.PI - del; a += del)
@@ -83,7 +84,7 @@ class Radar
     image(this.overlay, 0, 0, width, height);
     translate(cx, cy);
     // pointer
-    stroke(0, 255, 0);
+    stroke(this.pcolor[0], this.pcolor[1], this.pcolor[2]);
     strokeWeight(2);
     noFill();
     line(0, 0, (this.radius + 15) * cos(this.current_angle), (this.radius + 15) * sin(this.current_angle));
@@ -91,7 +92,7 @@ class Radar
     noStroke();
     for(let i = 0;i < this.segments;i ++)
     {
-      fill(0, 255, 0, map(i, 0, this.segments - 1, 255, 0));
+      fill(this.pcolor[0], this.pcolor[1], this.pcolor[2], map(i, 0, this.segments - 1, 255, 0));
       arc(0, 0, 2 * this.radius, 2 * this.radius, this.current_angle - (i + 1) * (this.spread / this.segments), this.current_angle - i * (this.spread / this.segments));
     }
     this.current_angle = (this.current_angle + this.angle_rate) % 360;
@@ -117,6 +118,9 @@ class Dot
   {
     this.x = x;
     this.y = y;
+    this.color_type = 0;
+    this.shape_type = 3;
+    this.color = [[0, 255, 0], [255, 0, 0]][this.color_type];
     this.max_life = int(360 / 0.8);
     this.life = this.max_life;
   }
@@ -126,10 +130,17 @@ class Dot
     let w = 8;
     let d = 4;
     noStroke();
-    fill(0, 255, 0, map(this.life, this.max_life, 0, 255, 20));
-    circle(this.x, this.y, 1.3 * w);
+    fill(this.color[0], this.color[1], this.color[2], map(this.life, this.max_life, 0, 255, 0));
+    if(this.shape_type == 0)
+      circle(this.x, this.y, 1.3 * w);
+    else if(this.shape_type == 1)
+      triangle(this.x - 0.562 * w, this.y + 0.325 * w, this.x + 0.562 * w, this.y + 0.325 * w, this.x, this.y - 0.65 * w);
+    else if(this.shape_type == 2)
+      square(this.x - 0.65 * w, this.y - 0.65 * w, 1.3 * w);
+    else if(this.shape_type == 3)
+      quad(this.x, this.y - 0.65 * w, this.x + 0.5 * w, this.y, this.x, this.y + 0.65 * w, this.x - 0.5 * w, this.y);
     noFill();
-    stroke(0, 255, 0, map(this.life, this.max_life, 0, 255, 0));
+    stroke(this.color[0], this.color[1], this.color[2], map(this.life, this.max_life, 0, 255, 0));
     line(this.x - w, this.y - w, this.x - d, this.y - w);
     line(this.x + d, this.y - w, this.x + w, this.y - w);
     line(this.x - w, this.y + w, this.x - d, this.y + w);
