@@ -1,5 +1,6 @@
 let cx, cy;
 let rad;
+let hol;
 
 function setup()
 {
@@ -9,16 +10,13 @@ function setup()
   cy = height / 2;
 
   rad = new Radar(300, 60, 120);
+  hol = new Holder(10, 300);
 }
 
 function draw()
 {
   background(0);
+  hol.update(deltaTime / 1000);
+  rad.scan(hol.list());
   rad.draw();
-  if(random() > 0.98)
-  {
-    let trad = map(random(), 0, 1, 0, rad.radius);
-    let tang = rad.current_angle;
-    rad.addDot(trad * cos(tang), trad * sin(tang));
-  }
 }

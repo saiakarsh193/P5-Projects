@@ -1,13 +1,13 @@
 class Dot
 {
-  constructor(x, y)
+  constructor(x, y, color_type=0, shape_type=0)
   {
     this.x = x;
     this.y = y;
-    this.color_type = 0;
-    this.shape_type = 3;
-    this.color = [[0, 255, 0], [255, 0, 0]][this.color_type];
-    this.max_life = int(360 / 0.8);
+    this.color_type = color_type;
+    this.shape_type = shape_type;
+    this.color = [[0, 255, 0], [255, 62, 28], [255, 255, 255], [255, 225, 24], [25, 255, 247], [204, 36, 237]][this.color_type];
+    this.max_life = int(360 / 1.2);
     this.life = this.max_life;
   }
 
@@ -16,7 +16,7 @@ class Dot
     let w = 8;
     let d = 4;
     noStroke();
-    fill(this.color[0], this.color[1], this.color[2], map(this.life, this.max_life, 0, 255, 0));
+    fill(this.color[0], this.color[1], this.color[2], map(this.life, this.max_life, 0, 255, 50));
     if(this.shape_type == 0)
       circle(this.x, this.y, 1.3 * w);
     else if(this.shape_type == 1)
