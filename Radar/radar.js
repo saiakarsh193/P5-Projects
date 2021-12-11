@@ -105,20 +105,17 @@ class Radar
     }
   }
 
-  addDot(x, y, color_type, shape_type)
+  addDot(x, y, data, color_type, shape_type)
   {
-    this.dots.push(new Dot(x, y, color_type, shape_type));
+    this.dots.push(new Dot(x, y, data, this.pcolor, color_type, shape_type));
   }
 
   scan(points)
   {
     for(let i = 0;i < points.length;i ++)
     {
-        let r = Math.sqrt(points[i][0] * points[i][0] + points[i][1] * points[i][1]);
-        let the = degrees(Math.atan2(points[i][1], points[i][0]));
-        the = (the + 360) % 360;
-        if(this.current_angle >= the && this.current_angle - this.angle_rate < the && this.range > r)
-            this.addDot(points[i][0] * this.scaler, points[i][1] * this.scaler, points[i][2], points[i][3]);
+      if(this.current_angle >= points[i][1] && this.current_angle - this.angle_rate < points[i][1] && this.range > points[i][0])
+        this.addDot(points[i][0] * cos(points[i][1]) * this.scaler, points[i][0] * sin(points[i][1]) * this.scaler, [points[i][0], points[i][1], points[i][2], points[i][3]], points[i][4], points[i][5]);
     }
   }
 }

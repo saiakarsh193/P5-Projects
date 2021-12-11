@@ -15,7 +15,12 @@ class Body
 
     list()
     {
-        return [this.position.x, this.position.y, this.color_type, this.shape_type];
+        return [this.position.mag(), this.ang(this.position), this.velocity.mag(), this.ang(this.velocity), this.color_type, this.shape_type];
+    }
+
+    ang(vec)
+    {
+        return (degrees(Math.atan2(vec.y, vec.x)) + 360) % 360;
     }
 }
 
