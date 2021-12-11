@@ -1,8 +1,10 @@
 class Radar
 {
-  constructor(radius, spread, segments)
+  constructor(range, radius, spread, segments)
   {
+    this.range = range;
     this.radius = radius;
+    this.scaler = this.radius / this.range;
     this.spread = spread;
     this.segments = segments;
     this.current_angle = 0;
@@ -33,9 +35,9 @@ class Radar
       this.overlay.fill(this.pcolor[0], this.pcolor[1], this.pcolor[2]);
       this.overlay.noStroke();
       this.overlay.textAlign(LEFT);
-      this.overlay.text(r, r + 3, 0);
+      this.overlay.text(Math.round(r / this.scaler), r + 3, 0);
       this.overlay.textAlign(RIGHT);
-      this.overlay.text(r, -(r + 3), 0);
+      this.overlay.text(Math.round(r / this.scaler), -(r + 3), 0);
     }
     // outer rim
     this.overlay.noFill();
@@ -115,8 +117,8 @@ class Radar
         let r = Math.sqrt(points[i][0] * points[i][0] + points[i][1] * points[i][1]);
         let the = degrees(Math.atan2(points[i][1], points[i][0]));
         the = (the + 360) % 360;
-        if(this.current_angle >= the && this.current_angle - this.angle_rate < the && this.radius > r)
-            this.addDot(points[i][0], points[i][1], 0, 0);
+        if(this.current_angle >= the && this.current_angle - this.angle_rate < the && this.range > r)
+            this.addDot(points[i][0] * this.scaler, points[i][1] * this.scaler, points[i][2], points[i][3]);
     }
   }
 }

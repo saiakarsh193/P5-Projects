@@ -4,6 +4,8 @@ class Body
     {
         this.position = createVector(x, y);
         this.velocity = createVector(vx, vy);
+        this.color_type = Math.round(random() * 5);
+        this.shape_type = Math.round(random() * 3);
     }
 
     update(dT)
@@ -13,18 +15,18 @@ class Body
 
     list()
     {
-        return [this.position.x, this.position.y];
+        return [this.position.x, this.position.y, this.color_type, this.shape_type];
     }
 }
 
 class Holder
 {
-    constructor(count, radius)
+    constructor(count, range, vmax)
     {
         this.bodies = [];
         this.count = count;
         for(let i = 0;i < this.count;i ++)
-            this.bodies.push(new Body((random() - 0.5) * 2 * radius, (random() - 0.5) * 2 * radius, random() * 6, random() * 8));
+            this.bodies.push(new Body((random() - 0.5) * 2 * range, (random() - 0.5) * 2 * range, random() * vmax, random() * vmax));
     }
 
     update(dT)

@@ -9,8 +9,8 @@ function setup()
   cx = width / 2;
   cy = height / 2;
 
-  rad = new Radar(300, 60, 120);
-  hol = new Holder(10, 300);
+  rad = new Radar(10000, 300, 60, 120);
+  hol = new Holder(10, 12000, 200);
 }
 
 function draw()
