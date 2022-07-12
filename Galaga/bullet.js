@@ -2,11 +2,7 @@ class Bullet extends Sprite
 {
     constructor(x, y, params)
     {
-        let sprite_map = [
-            "y",
-            "w",
-        ];
-        super(sprite_map, params);
+        super('bullet', params);
         this.x = x;
         this.y = y;
         this.speed = 3;
@@ -16,7 +12,7 @@ class Bullet extends Sprite
     update()
     {
         this.y -= this.speed;
-        if(this.y + this.smap_rows < 0)
+        if(this.y + this.frame_rows < 0)
             this.isUsed = true;
     }
 }
