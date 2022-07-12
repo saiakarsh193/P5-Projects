@@ -2,19 +2,20 @@ let cx, cy;
 let player;
 let bullets = [];
 let params = {
-    rows: 60,
-    columns: 100,
-    pixel_size: 8,
-    enable_grid: true,
-    enable_vertical_move: false,
+    rows: 160,
+    columns: 300,
+    pixel_size: 6,
     translate_x_offset: 50,
     translate_y_offset: 50,
+    enable_grid: false,
+    enable_vertical_move: false,
+    enable_double_bullets: true,
 };
 let ctime = 0;
 
 function setup()
 {
-    createCanvas(1200, 680);
+    createCanvas(1900, 1060);
     params.color_palette = {
         'r':    color(255,   0,   0),
         'g':    color(  0, 255,   0),
@@ -55,6 +56,7 @@ function renderObjects()
 function updateObjects()
 {
     bullets.forEach((bullet) => bullet.update());
+
     // removing obsolete (isUsed = true) bullets
     var i = bullets.length;
     while(i --)
@@ -62,6 +64,7 @@ function updateObjects()
         if(bullets[i].isUsed)
             bullets.splice(i, 1);
     }
+
     ctime += deltaTime / 1000;
 }
 
