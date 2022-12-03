@@ -62,13 +62,25 @@ class Board
                     fill(this.color_pallete.grey);
                     circle(cen[0], cen[1], this.disc_diameter);
                 }
-
+                // continue;
                 // valid position
                 if(this.isIndexValid(row, col))
                 {
                     noFill();
                     circle(cen[0], cen[1], this.disc_diameter);
                 }
+            }
+        }
+        return;
+        stroke(0);
+        strokeWeight(3);
+        noFill();
+        for(var row = 0;row < this.grid_size;row += 2)
+        {
+            for(var col = 0;col < this.grid_size;col += 2)
+            {
+                let tl = this.indexToTopLeft(row, col);
+                square(tl[0], tl[1], this.cell_size * 2);
             }
         }
     }
