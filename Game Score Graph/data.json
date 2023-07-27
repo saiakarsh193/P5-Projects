@@ -1,0 +1,45 @@
+{
+    "meta": {
+        "screen_width": 1200,
+        "screen_height": 600,
+        "graph_width": 800,
+        "graph_height": 400,
+        "max_score": 200,
+        "score_partition": 20,
+        "color_mode": "dark",
+        "use_hashed_colors": true,
+        "use_title": false,
+        "title": "Score Graph",
+        "show_x_axis": true,
+        "show_y_axis": true,
+        "show_grid": true,
+        "show_legend": true,
+        "show_boundary": true,
+        "show_graph": true,
+        "show_graph_dot": true,
+        "show_graph_player_name": true
+    },
+    "players": [
+        "Akarsh",
+        "Ankitha",
+        "Vasavi",
+        "Kavitha",
+        "Srinivas",
+        "Bharati"
+    ],
+    "rounds": [
+        [11, 14, 2, 3, 0, 10],
+        [12, 0, 10, 25, 11, 13],
+        [0, 12, 38, 6, 25, 16],
+        [26, 19, 22, 20, 30, 0],
+        [1, 2, 8, 6, 2, 0],
+        [12, 10, 14, 11, 24, 0],
+        [19, 9, 13, 11, 0, 11],
+        [22, 2, 24, 3, 7, 0],
+        [12, 14, 0, 9, 32, 8],
+        [6, 0, 12, 0, 7, 7],
+        [0, 21, 1, 12, 22, 0],
+        [28, 0, 23, 23, 22, 22],
+        [2, 7, 26, 16, 0, 4]
+    ]
+}
